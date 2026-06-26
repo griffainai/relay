@@ -6,7 +6,7 @@
 
 Relay is a folder-based specialist for a small digital studio. Clients drop requests in plain language, your team runs every account from one shared board, and an AI connected to the same files **completes the routine work autonomously** — does it, writes the completion note — and escalates only the 20% that needs a human's judgment.
 
-It's built with [Interpretable Context Methodology](../../../README.md): the agent is a folder, and the studio it runs is a folder. The path through the folders *is* the logic.
+It's built with **Interpretable Context Methodology (ICM)**: the agent is a folder, and the studio it runs is a folder. The path through the folders *is* the logic.
 
 ---
 

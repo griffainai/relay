@@ -2,7 +2,7 @@
 
 The interactive demo for Relay — a faithful, IP-safe slice of the studio operating layer, in the Onyx brand aesthetic. Runs entirely client-side; no backend, no database, no real data.
 
-> Built with Next.js (static export). See [PLAN.md](PLAN.md) for the full Grand Slam demo design.
+> Built with Next.js (static export).
 
 ## What it does
 - **Tri-pane shell** (rail · sidebar · top bar) in the Onyx/clay brand, light + dark.
