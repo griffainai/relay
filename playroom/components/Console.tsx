@@ -108,6 +108,10 @@ export function Console() {
           <button key={p.label} disabled={running} onClick={() => intake(p.text)} className="text-[11px] px-2 py-0.5 rounded-full border border-line text-ink-2 hover:text-ink hover:border-ink-2/50 disabled:opacity-40">{p.label}</button>
         ))}
       </div>
+      <div className="text-[11px] text-muted mt-2 flex items-start gap-1.5">
+        <span className="text-clay shrink-0">ⓘ</span>
+        <span>Each client is a folder. “Run tasks” = point Claude at that folder — it reads the rules and does what's routine for that client.</span>
+      </div>
       {log.length > 0 && (
         <div className="mt-3 pt-2.5 border-t border-line space-y-1">
           {log.map((l, i) => <div key={i} className="text-[12px] font-mono text-ink-2 animate-lane-in"><span className="text-muted">·</span> {l}</div>)}
