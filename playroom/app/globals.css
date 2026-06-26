@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #0b0b0c;
+  --ink-2: #3a3a3d;
+  --muted: #76767b;
+  --line: #e7e7e4;
+  --soft: #f7f7f6;
+  --paper: #ffffff;
+  --clay: #a4561f;
+  --clay-soft: #f1e6dd;
+  --clay-deep: #8f4a1a;
+  --ok: #1f7a4d;
+  --warn: #f59e0b;
+  --crit: #dc2626;
+  --font-sans: var(--font-sans-next), "DM Sans";
+  --font-mono: var(--font-mono-next), "DM Mono";
+}
+
+.dark {
+  --ink: #ffffff;
+  --ink-2: #c9c9cc;
+  --muted: #8e8e93;
+  --line: #26262a;
+  --soft: #161618;
+  --paper: #0b0b0c;
+  --clay: #d07c42;
+  --clay-soft: #2a1c12;
+  --clay-deep: #d07c42;
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Editorial label / eyebrow */
+.eyebrow {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+}
+
+/* Wordmark tracking */
+.wordmark {
+  font-weight: 600;
+  letter-spacing: 0.3em;
+}
+
+/* Thin scrollbars to match the editorial feel */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 9999px;
+}

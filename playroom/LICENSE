@@ -1,0 +1,22 @@
+Relay™ — Proprietary, Evaluation-Only License
+Copyright © 2026. All rights reserved.
+
+This license covers the **Relay application** — the playroom demo and its source
+code in this directory — and the "Relay" name and marks.
+
+You MAY:
+  • View the source and run the demo for personal evaluation.
+
+You MAY NOT, without prior written permission:
+  • Use the software, or any substantial part of it, for commercial purposes;
+  • Reproduce, redistribute, host, sublicense, or sell it;
+  • Use the "Relay" name, wordmark, or logo for any product or service;
+  • Represent it, or a derivative, as your own.
+
+NOTE ON THE METHODOLOGY: The Interpretable Context Methodology folder that
+accompanies this project (identity.md, rules.md, examples.md, reference/, etc.)
+is shared openly as a *methodology demonstration* and is not restricted by this
+license. This license restricts the **application and brand** only.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. This is a demo
+running on fabricated data; it is not the production product.
