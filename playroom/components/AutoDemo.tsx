@@ -247,7 +247,7 @@ export function AutoDemo() {
       <div className="max-w-2xl text-center">
         <div className="flex justify-center mb-6 text-white"><RelayMark size={42} /></div>
         <h2 className="text-white text-3xl md:text-4xl font-light leading-tight tracking-tight mb-4">This is a slice of the real system we run our studio on.</h2>
-        <p className="text-white/70 text-[16px] leading-relaxed mb-8">The methodology scales — to teams, to any folder-based work. What you just used is the tip of the iceberg. The folder is the product; the product is yours.</p>
+        <p className="text-white/70 text-[16px] leading-relaxed mb-8">The methodology scales — to teams, to any folder-based work. The full system adds a calendar that drives billing, a costs board, decisions, and org admin. We kept this demo deliberately specific so it stays clear and didn't go overboard — what you used is the tip of the iceberg. The folder is the product; the product is yours.</p>
         <div className="flex gap-3 justify-center">
           <button onClick={stop} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">Explore it yourself →</button>
           <button onClick={start} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Replay</button>

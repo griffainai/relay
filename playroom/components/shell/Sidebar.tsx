@@ -11,7 +11,12 @@ const WORK: Nav[] = [
   { view: "activity", label: "Activity", hint: "what we all did" },
 ];
 const SYSTEM: Nav[] = [{ view: "brain", label: "The Brain", hint: "how it thinks" }];
-const LOCKED = ["Calendar", "Decisions", "Costs", "Admin"];
+const LOCKED: { label: string; key: string }[] = [
+  { label: "Calendar", key: "calendar" },
+  { label: "Decisions", key: "decisions" },
+  { label: "Costs", key: "costs" },
+  { label: "Admin", key: "admin" },
+];
 
 // A client (Dana) sees a stripped portal — just her board + messages.
 const CLIENT_VIEWS: View[] = ["board", "messages"];
@@ -49,7 +54,9 @@ export function Sidebar() {
             <div className="eyebrow text-muted px-2.5 mb-1.5">In the full system</div>
             <div className="space-y-0.5">
               {LOCKED.map((l) => (
-                <div key={l} className="px-2.5 py-1.5 rounded-md flex items-center justify-between opacity-50"><span className="text-[13.5px] text-muted">{l}</span><span className="text-[10px] text-muted">🔒</span></div>
+                <button key={l.key} onClick={() => dispatch({ type: "fullSystem", key: l.key })} className="w-full px-2.5 py-1.5 rounded-md flex items-center justify-between opacity-60 hover:opacity-100 hover:bg-soft/60 transition" title={`${l.label} — see what it does in the full system`}>
+                  <span className="text-[13.5px] text-muted">{l.label}</span><span className="text-[10px] text-muted">🔒</span>
+                </button>
               ))}
             </div>
           </>

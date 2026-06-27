@@ -2,6 +2,11 @@
 import { useState } from "react";
 import { useStore } from "@/lib/store";
 
+// To COLLECT reviews privately (no backend): create a free Formspree form and
+// paste its URL here, e.g. "https://formspree.io/f/abcdwxyz". They land in your
+// Formspree inbox/dashboard. Empty = local-only (visitor's browser).
+const FEEDBACK_ENDPOINT = "";
+
 export function ReviewModal() {
   const { state, dispatch } = useStore();
   const [stars, setStars] = useState(0);
@@ -13,11 +18,15 @@ export function ReviewModal() {
   if (!state.review) return null;
   const close = () => dispatch({ type: "review", on: false });
   const submit = () => {
+    const payload = { stars, like, improve, at: new Date().toISOString(), source: "relay-demo" };
     try {
       const all = JSON.parse(localStorage.getItem("relay-feedback") || "[]");
-      all.push({ stars, like, improve, at: new Date().toISOString() });
+      all.push(payload);
       localStorage.setItem("relay-feedback", JSON.stringify(all));
     } catch {}
+    if (FEEDBACK_ENDPOINT) {
+      fetch(FEEDBACK_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(payload) }).catch(() => {});
+    }
     setSent(true);
     setTimeout(close, 1600);
   };

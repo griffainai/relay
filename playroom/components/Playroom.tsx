@@ -17,6 +17,7 @@ import { ClientPortal } from "./ClientPortal";
 import { AutoDemo } from "./AutoDemo";
 import { Chatbot } from "./Chatbot";
 import { ReviewModal } from "./ReviewModal";
+import { FullSystemModal } from "./FullSystemModal";
 
 function Workspace() {
   const { state, dispatch } = useStore();
@@ -74,6 +75,7 @@ function Root() {
       <AutoDemo />
       <Chatbot />
       <ReviewModal />
+      <FullSystemModal />
     </>
   );
 }
