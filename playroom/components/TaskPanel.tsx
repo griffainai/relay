@@ -95,7 +95,7 @@ export function TaskPanel({ t }: { t: Task }) {
     dispatch({ type: "comment", id: t.id, comment: { id: `c-${Date.now()}`, author: VIEWER, body: "Routed to Executive for a call.", at: "now" } });
   };
   return (
-    <div data-demo="panel" className="w-[420px] shrink-0 border-l border-line bg-paper flex flex-col h-full">
+    <div data-demo="panel" className="fixed inset-0 z-30 w-full md:static md:inset-auto md:z-auto md:w-[420px] shrink-0 border-l border-line bg-paper flex flex-col h-full">
       {/* header */}
       <div className="flex items-center gap-2 px-4 h-[52px] border-b border-line shrink-0">
         <span className="font-mono text-[11px] text-muted">{t.id}</span>

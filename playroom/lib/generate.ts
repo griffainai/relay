@@ -95,12 +95,48 @@ ${list(b.clears)}
 If a request isn't here and isn't obviously routine + reversible, treat it as HOLD or ESCALATE.
 ` });
   files.push({ path: "reference/voice.md", content:
-`# Voice & standards for ${b.biz}
+`# Voice — ${b.biz}
 
 ${voice}
 
-Add examples of "good" below — real before/after, phrases you love, phrases you ban.
-The quality of everything I produce is set by what you put here.
+## Words we use
+- (phrases, tone, rhythm you want)
+
+## Words we ban
+- (jargon, clichés, anything off-brand)
+` });
+
+  files.push({ path: "reference/standards.md", content:
+`# Standards — what "good" means for ${b.biz}
+
+> This file is where output quality comes from. The more specific you are, the better the work. Go deep.
+
+## Quality bar
+- (what "done well" looks like — be concrete)
+
+## Design / format
+- (layout, length, structure, design system, brand rules, do's and don'ts)
+
+## Checklist before anything ships
+- [ ] In our voice (see voice.md)
+- [ ] No new claims we can't back up
+- [ ] (your own checks)
+` });
+
+  files.push({ path: "reference/examples.md", content:
+`# Examples of good (and bad) — ${b.biz}
+
+> The single highest-leverage file. Paste real before/after. Claude matches your examples.
+
+## ✅ Good
+\`\`\`
+(paste a real piece of work you were proud of, and one line on why)
+\`\`\`
+
+## ❌ Not it
+\`\`\`
+(paste something off-brand, and why it misses)
+\`\`\`
 ` });
 
   const clientList = clients.length ? clients : [{ name: b.solo ? b.biz : "First client", work: b.what }];

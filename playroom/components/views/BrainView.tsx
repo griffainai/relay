@@ -1,5 +1,7 @@
 "use client";
 import { Markdown } from "../Markdown";
+import { useStore } from "@/lib/store";
+import { SCHOOL } from "@/lib/promo";
 
 const FILES = [
   {
@@ -35,6 +37,7 @@ const FILES = [
 ];
 
 export function BrainView() {
+  const { dispatch } = useStore();
   return (
     <div className="h-full overflow-y-auto p-6">
       <div className="max-w-3xl mx-auto">
@@ -58,6 +61,16 @@ export function BrainView() {
               <Markdown>{f.body}</Markdown>
             </div>
           ))}
+        </div>
+
+        <div className="mt-6 rounded-xl border border-clay/30 bg-clay/[0.05] p-5">
+          <div className="eyebrow text-clay mb-1.5">The part that's on you</div>
+          <h3 className="text-[17px] font-medium text-ink mb-1.5">This structure is free. The quality is the folder you build.</h3>
+          <p className="text-[13px] text-ink-2 leading-relaxed mb-3">Claude is only ever as good as the folder you hand it — the context, the standards, the taste, the examples of “good”. That depth is the craft, and it's the methodology: ICM. We give you the structure; you bring the substance.</p>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => dispatch({ type: "builder", on: true })} className="bg-clay text-white text-[13px] px-4 py-2 rounded-md font-medium hover:opacity-90">Build your folder →</button>
+            <a href={SCHOOL.url} target="_blank" rel="noreferrer" className="text-[13px] text-ink-2 border border-line px-4 py-2 rounded-md hover:text-ink hover:border-ink-2/50">Learn ICM in {SCHOOL.name} →</a>
+          </div>
         </div>
       </div>
     </div>

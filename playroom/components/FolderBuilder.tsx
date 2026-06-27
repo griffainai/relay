@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { RelayMark } from "./RelayMark";
 import { generateFolder, slug, type BizInput } from "@/lib/generate";
+import { scoreInput } from "@/lib/score";
 import { SCHOOL } from "@/lib/promo";
 
 const DEFAULT_CLEARS = ["Answer questions from the folder", "Draft or edit copy in our voice", "Update a section or page", "Summarize a document", "Schedule from known options"];
@@ -120,8 +121,25 @@ export function FolderBuilder() {
               <>
                 <h2 className="text-white text-2xl font-light tracking-tight mb-1">Here's your folder.</h2>
                 <p className="text-white/55 text-[13.5px] mb-4">{files.length} files, scaffolded from your answers. Download it, fill in the depth, and it's your operator.</p>
-                <div className="rounded-xl border border-white/12 bg-white/[0.03] p-4 max-h-[300px] overflow-y-auto font-mono text-[12px] text-white/70 mb-5">
-                  {files.map((f) => <div key={f.path} className="py-0.5">📄 {slug(biz || "my")}-relay/{f.path}</div>)}
+                <div className="grid sm:grid-cols-2 gap-3 mb-5">
+                  <div className="rounded-xl border border-white/12 bg-white/[0.03] p-4 max-h-[280px] overflow-y-auto font-mono text-[12px] text-white/70">
+                    {files.map((f) => <div key={f.path} className="py-0.5">📄 {slug(biz || "my")}-relay/{f.path}</div>)}
+                  </div>
+                  {(() => { const sc = scoreInput(input); return (
+                    <div className="rounded-xl border border-white/12 bg-white/[0.03] p-4">
+                      <div className="flex items-center justify-between mb-2"><span className="eyebrow text-clay">Folder quality</span><span className="text-white/80 text-[13px] font-medium">{sc.grade} · {sc.pct}%</span></div>
+                      <div className="h-1.5 rounded-full bg-white/10 overflow-hidden mb-3"><div className="h-full bg-clay transition-all" style={{ width: `${sc.pct}%` }} /></div>
+                      <div className="space-y-1.5">
+                        {sc.checks.map((c, i) => (
+                          <div key={i} className="flex items-start gap-2 text-[12px]">
+                            <span className={c.ok ? "text-ok" : "text-white/30"}>{c.ok ? "✓" : "○"}</span>
+                            <span className={c.ok ? "text-white/70" : "text-white/55"}>{c.label}{!c.ok && <span className="text-white/35"> — {c.hint}</span>}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-[11.5px] text-white/50 mt-3">{sc.blurb} <a href={SCHOOL.url} target="_blank" rel="noreferrer" className="text-clay hover:underline">The craft is ICM →</a></p>
+                    </div>
+                  ); })()}
                 </div>
                 <button onClick={download} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">↓ Download your folder (.zip)</button>
               </>
