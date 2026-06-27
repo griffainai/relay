@@ -46,7 +46,13 @@ export function BetaModal() {
             </div>
             <h3 className="text-[21px] font-medium text-ink tracking-tight mb-1">{BETA.headline}</h3>
             <p className="text-[13px] text-muted mb-3">{BETA.sub}</p>
-            <p className="text-[13.5px] text-ink-2 leading-relaxed mb-4">{BETA.body}</p>
+            <p className="text-[13.5px] text-ink-2 leading-relaxed mb-3">{BETA.body}</p>
+
+            <button onClick={() => { close(); dispatch({ type: "builder", on: true }); }} className="w-full text-left rounded-lg border border-clay/40 bg-clay/[0.07] px-3.5 py-2.5 mb-4 hover:bg-clay/10 group">
+              <span className="text-[13px] text-ink font-medium">Want it now? Build your folder →</span>
+              <span className="block text-[11.5px] text-muted">A 2-minute generator scaffolds your whole ICM folder from your business — download it free, no email.</span>
+            </button>
+            <div className="text-[11px] text-muted mb-3 font-mono">— or join the beta for white-glove onboarding —</div>
 
             <label className="block text-[12px] text-muted mb-1 font-mono">Email</label>
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" className="w-full bg-soft border border-line rounded-md px-3 py-2 text-[13.5px] text-ink outline-none mb-3.5 focus:border-ink-2/50" />

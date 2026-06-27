@@ -235,6 +235,7 @@ export function AutoDemo() {
           <span className="text-clay">▶</span><span className="text-[13px] font-medium">Watch the pitch + demo</span>
         </button>
         <button onClick={() => dispatch({ type: "examples", mode: "gallery" })} className="bg-paper text-ink border border-line rounded-full px-4 py-2.5 shadow-xl hover:bg-soft text-[13px] font-medium">More examples</button>
+        <button onClick={() => dispatch({ type: "builder", on: true })} className="bg-clay text-white rounded-full px-4 py-2.5 shadow-xl hover:opacity-90 text-[13px] font-medium">Build your folder</button>
       </div>
     );
   }

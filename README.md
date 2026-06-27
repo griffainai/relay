@@ -120,6 +120,12 @@ npm run build    # static export → ./out (deploy anywhere)
 ```
 Node 20–24 · Next.js · static export · no backend. See [`playroom/README.md`](playroom/README.md).
 
+## Make it yours
+Relay isn't a SaaS you log into — it's *your folder + this app*. The demo is the app on mock data; your version is the same app with your folder dropped in.
+1. **Generate your folder** — in the demo, hit **Build your folder**: a 2-minute wizard scaffolds a complete ICM folder (CLAUDE.md, rules.md, a `clients/<you>/` tree…) from your business, your clients, your voice, and your clear-vs-escalate rules → downloads as a `.zip`.
+2. **Use it instantly** — drop that folder into a Claude Project and it's your operator, no install.
+3. **Or run the full UI** — put the folder in `playroom/studio/`, `npm run dev`, and click **Run live with Claude** with your own key. Same board, your data, your key. It's yours.
+
 ## What's in this repo
 - **`brief.md`** — the competition brief (treat-yourself-as-the-client).
 - **The ICM specialist** — `identity.md`, `rules.md`, `examples.md`, `CLAUDE.md`, `reference/`, `rooms/`, `skills/`, `patterns/`, `tests/`, `studio/`.

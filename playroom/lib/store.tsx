@@ -30,6 +30,7 @@ interface State {
   examples: string | null; // "gallery" | "vignette" | "explore" | "offer" | null
   beta: boolean; // the beta early-access gate
   connect: boolean; // the "connect your Claude key" modal
+  builder: boolean; // the "build your folder" generator
 }
 
 type Action =
@@ -52,6 +53,7 @@ type Action =
   | { type: "examples"; mode: string | null }
   | { type: "beta"; on: boolean }
   | { type: "connect"; on: boolean }
+  | { type: "builder"; on: boolean }
   | { type: "typing"; who: PersonId | null }
   | { type: "add"; task: Task }
   | { type: "update"; id: string; patch: Partial<Task> }
@@ -78,6 +80,7 @@ const initial: State = {
   examples: null,
   beta: false,
   connect: false,
+  builder: false,
 };
 
 function reducer(s: State, a: Action): State {
@@ -126,6 +129,8 @@ function reducer(s: State, a: Action): State {
       return { ...s, beta: a.on };
     case "connect":
       return { ...s, connect: a.on };
+    case "builder":
+      return { ...s, builder: a.on };
     case "dataset": {
       setActiveDataset(a.id);
       const ds = DATASETS[a.id] ?? DATASETS.studio;

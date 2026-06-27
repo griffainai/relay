@@ -24,6 +24,7 @@ import { ReviewsWall } from "./ReviewsWall";
 import { FullSystemModal } from "./FullSystemModal";
 import { BetaModal } from "./BetaModal";
 import { ConnectModal } from "./ConnectModal";
+import { FolderBuilder } from "./FolderBuilder";
 
 function Workspace() {
   const { state, dispatch } = useStore();
@@ -92,6 +93,7 @@ function Root() {
       <FullSystemModal />
       <BetaModal />
       <ConnectModal />
+      <FolderBuilder />
     </>
   );
 }

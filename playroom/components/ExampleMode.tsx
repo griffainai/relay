@@ -176,8 +176,8 @@ export function ExampleMode() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <button onClick={() => dispatch({ type: "beta", on: true })} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">Join the private beta →</button>
-          <button onClick={() => dispatch({ type: "examples", mode: "explore" })} className="text-white/75 px-5 py-3 rounded-lg text-[14px] border border-white/20 hover:text-white">Keep exploring this example</button>
+          <button onClick={() => dispatch({ type: "builder", on: true })} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">Build your folder (free) →</button>
+          <button onClick={() => dispatch({ type: "beta", on: true })} className="text-white/75 px-5 py-3 rounded-lg text-[14px] border border-white/20 hover:text-white">Join the private beta</button>
           <button onClick={backToGallery} className="text-white/55 px-4 py-3 text-[13px] hover:text-white">← All examples</button>
           <button onClick={toStudio} className="text-white/55 px-4 py-3 text-[13px] hover:text-white ml-auto">✕ Back to the demo</button>
         </div>
