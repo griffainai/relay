@@ -10,6 +10,7 @@ import { AnalyticsView } from "./views/AnalyticsView";
 import { MessagesView } from "./views/MessagesView";
 import { ActivityView } from "./views/ActivityView";
 import { BrainView } from "./views/BrainView";
+import { AdminView } from "./views/AdminView";
 import { Tour } from "./Tour";
 import { CommandK } from "./CommandK";
 import { QuickAdd } from "./QuickAdd";
@@ -54,6 +55,7 @@ function Workspace() {
           {state.view === "messages" && <MessagesView />}
           {state.view === "activity" && <ActivityView />}
           {state.view === "brain" && <BrainView />}
+          {state.view === "admin" && <AdminView />}
         </div>
       </div>
       <Tour />

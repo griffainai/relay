@@ -81,6 +81,9 @@ const BEATS: Beat[] = [
   { chapter: "Who sees what", title: "Different people, different views.", dur: 6200, selector: '[data-demo="role"]',
     text: "Executive sees everything; a member sees client spaces; a client sees only their own requests. Real, enforced access — every account scoped server-side.",
     action: (d) => { d({ type: "fileMode", on: false }); d({ type: "select", id: undefined }); d({ type: "role", role: "exec" }); } },
+  { chapter: "You run access", title: "Invite teammates — grant exactly what they see.", dur: 6600, selector: '[data-demo="main"]',
+    text: "You manage it yourself: invite someone by email, set their tier, and check off the exact spaces they get. That's how a client only ever sees their own folder, and a member never sees Executive.",
+    action: (d) => d({ type: "view", view: "admin" }) },
 
   // ── what's in the full system (explained, not shown) ──
   { chapter: "In the full system", title: "Logins, and many businesses — separated.", dur: 6600, selector: '[data-demo="locked"]',

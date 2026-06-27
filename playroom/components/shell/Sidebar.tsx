@@ -17,7 +17,6 @@ const LOCKED: { label: string; key: string }[] = [
   { label: "Calendar", key: "calendar" },
   { label: "Decisions", key: "decisions" },
   { label: "Costs", key: "costs" },
-  { label: "Admin", key: "admin" },
 ];
 
 // A client (Dana) sees a stripped portal — just her board + messages.
@@ -53,6 +52,12 @@ export function Sidebar() {
           <>
             <div className="eyebrow text-muted px-2.5 mb-1.5">System</div>
             <div className="space-y-0.5 mb-4">{SYSTEM.map((v) => <Item key={v.view} v={v} />)}</div>
+            {state.role === "exec" && (
+              <>
+                <div className="eyebrow text-muted px-2.5 mb-1.5">Org</div>
+                <div className="space-y-0.5 mb-4"><Item v={{ view: "admin", label: "Members", hint: "invite & access" }} /></div>
+              </>
+            )}
             <div className="eyebrow text-muted px-2.5 mb-1.5">In the full system</div>
             <div data-demo="locked" className="space-y-0.5">
               {LOCKED.map((l) => (
