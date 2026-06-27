@@ -1,97 +1,136 @@
-# Relay
+<p align="center">
+  <img src="assets/relay-wordmark.svg" alt="Relay" width="190" />
+</p>
 
-**Every tool you've tried organizes your work and hands it back to you. Relay finishes it.**
+<p align="center"><strong>Every tool you've tried organizes your work and hands it back to you. Relay finishes it.</strong></p>
 
-> ▶ **Try the live demo:** **https://relay-playroom.vercel.app** — type a client request, hit *Run tasks*, flip any card to its markdown file, and use *View as* to see the access model. No signup.
-
-Relay is a folder-based specialist for a small digital studio. Clients drop requests in plain language, your team runs every account from one shared board, and an AI connected to the same files **completes the routine work autonomously** — does it, writes the completion note — and escalates only the 20% that needs a human's judgment.
-
-It's built with **Interpretable Context Methodology (ICM)**: the agent is a folder, and the studio it runs is a folder. The path through the folders *is* the logic.
+<p align="center">
+  <a href="https://relay-playroom.vercel.app"><img src="https://img.shields.io/badge/▶_live_demo-relay--playroom.vercel.app-A4561F?style=for-the-badge" alt="Live demo" /></a>
+  &nbsp;
+  <img src="https://img.shields.io/badge/methodology-Interpretable_Context-0B0B0C?style=for-the-badge" alt="ICM" />
+  &nbsp;
+  <img src="https://img.shields.io/badge/built_with-Next.js_·_Claude-0B0B0C?style=for-the-badge" alt="Built with" />
+</p>
 
 ---
 
-## Who it's for
-A 2–5 person studio (web, content, branding) juggling several client accounts at once — drowning in small requests, losing work between teammates, and spending senior hours on copy tweaks that don't need them.
+Relay is a **folder-based studio operator**. Clients ask in plain language, a small team runs every account from one board, and an AI connected to the same files **completes the routine work and escalates what needs a human**. The board is the work. The files are the truth. If the app dies, the work lives.
 
-## Why it's different (the 30-second version)
+It's built with [**Interpretable Context Methodology (ICM)**](#the-methodology--icm): the agent is a folder, and the studio it runs is a folder. The path through the folders *is* the logic.
 
-| | A task tool (Asana, Linear, Notion) | **Relay** |
+> **▶ Watch the 90-second demo:** **[relay-playroom.vercel.app](https://relay-playroom.vercel.app)** — it opens with a 60-second pitch, then walks the whole thing, then shows Claude running the folder. No signup.
+
+## Contents
+- [The 60-second story](#the-60-second-story)
+- [What Relay is](#what-relay-is)
+- [How it works](#how-it-works)
+- [The folder](#the-folder)
+- [Who sees what (the access model)](#who-sees-what-the-access-model)
+- [Clients are engagements](#clients-are-engagements)
+- [What's real vs. this demo](#whats-real-vs-this-demo)
+- [Use the specialist yourself](#use-the-specialist-yourself)
+- [Run the demo locally](#run-the-demo-locally)
+- [What's in this repo](#whats-in-this-repo)
+- [The methodology — ICM](#the-methodology--icm)
+- [License](#license)
+
+## The 60-second story
+Two people run **eight companies**. Work was scattered across Slack, docs, and eight separate folders — no way to see what was dying or what needed them next. They tried the enterprise-platform trap (role matrices, dashboards) and scrapped it. The real problem was never features — it was **operating discipline**.
+
+So they built the opposite of a platform: a **folder**. Every task, message, decision, and deliverable is a markdown file they own. The board is just a window onto it. An AI reads the same folder and does the routine work. They built it for themselves first — Relay is the demo of that system, on fabricated data.
+
+## What Relay is
+- **A board that's really a folder.** Every card is a markdown file (`clients/<slug>/requests/<id>.md`). Move it, complete it, comment on it — the file changes.
+- **An AI operator, not a chatbot.** It sorts every request — 🟢 *clear* / 🟡 *hold* / 🔴 *escalate* — does what's routine, writes a completion note, and refuses what it shouldn't touch (publishing, pricing, anything irreversible).
+- **Three actors on one board.** Operators (you + your partner), clients (their own scoped portal), and the AI — all editing the same files.
+- **Run it two ways.** Work a task by hand (copy the prompt → run it in Claude → paste the note), or hand Claude the whole client folder and it clears the queue autonomously.
+
+## How it works
+
+<p align="center"><img src="assets/architecture.svg" alt="The folder is the source of truth" width="760" /></p>
+
+**The folder is the source of truth.** The UI is a window; the AI is a worker; the folder is the business. No database owns your work.
+
+**The Lane Protocol** (`rules.md`, as code) sorts every request:
+
+| Outcome | When | What happens |
 |---|---|---|
-| Requests | You translate them into tickets | Clients write plainly; Relay structures them |
-| The work | It tracks the work | It **completes** the work |
-| The AI | Summarizes, suggests | Does the task, writes the note |
-| Source of truth | A database you rent | **Files you own** — survives the app |
-| Trust | — | Completes what's safe, **escalates what isn't** |
+| 🟢 **Clear** | reversible · unambiguous · in the playbook | do it → write a 3-line completion note → done |
+| 🟡 **Hold** | ambiguous / missing info | ask exactly one question, then wait |
+| 🔴 **Escalate** | irreversible · money · production · scope · novelty | hand to a human with a recommendation — never attempt |
 
-The thing that makes a client owner trust it (it knows what *not* to touch) is the same thing that makes the methodology clean: a folder, a routing map, a refusal list.
+**Three layers (ICM):** a **Map** (`CLAUDE.md`, always loaded — routing only) → **Rooms** (`CONTEXT.md`, loaded per stage of work) → **Skills** (`SKILL.md`, loaded only when a task needs one). The folder behaves like a deep specialist without ever loading everything.
 
----
-
-## The folder map
-
+## The folder
 ```
 relay/
-├── brief.md              ← the client brief (start here)
-├── README.md             ← you are here
-│
-├── CLAUDE.md             ← Layer 1: the map + routing table (always loaded)
-├── identity.md           ← who Relay is
-├── rules.md              ← the Lane Protocol + refusal list
-├── examples.md           ← annotated runs (the showpiece)
-├── anti-examples.md      ← what it must never do
-├── working-theory.md     ← what Relay has learned about THIS studio
-│
-├── rooms/                ← Layer 2: CONTEXT per stage of work
-│   ├── intake/ · delivery/ · escalations/ · standup/
-├── skills/               ← Layer 3: capabilities, loaded only when needed
-│   ├── copy-edit/ · content-update/ · page-change/ · seo-meta/ · status-digest/
-├── reference/            ← tactical knowledge
-│   ├── lane-protocol.md · playbook.md · request-format.md
-│   ├── folder-map.md · voice-and-tone.md
-│   ├── completion-note-template.md · escalation-note-template.md
-├── patterns/             ← named operator moves
-├── sessions/             ← longitudinal memory of past runs
-├── tests/                ← 10 behavior tests with a pass bar
-│
-└── studio/               ← THE DATA Relay operates on (also an ICM folder)
-    ├── STATE.md          ← the whole board
-    ├── team/people.md
-    └── clients/
-        ├── northwind/    ← card · CONTEXT · STATE · requests/ · deliverables/
-        └── acme-studio/  ← card · CONTEXT · STATE · requests/ · deliverables/
+├── brief.md            ← the client brief (start here)
+├── identity.md         ← who Relay is
+├── rules.md            ← the Lane Protocol + refusal list (the engine)
+├── examples.md         ← annotated runs · anti-examples.md
+├── CLAUDE.md           ← Layer 1: the map + routing table
+├── reference/          ← playbook, lane-protocol, templates, voice
+├── rooms/              ← Layer 2: intake · delivery · escalations · standup
+├── skills/             ← Layer 3: copy-edit · content-update · seo-meta · …
+├── patterns/ · sessions/ · tests/ · working-theory.md
+├── studio/             ← a working studio on fabricated data
+│   └── clients/<slug>/   card · CONTEXT · STATE · requests/ · deliverables/
+└── playroom/           ← the live, deployable demo (Next.js)
 ```
+Every file above is plain markdown you can read, edit, and own.
 
-## How the three layers work (ICM)
-- **Layer 1 — the Map** (`CLAUDE.md`): always loaded, holds only directions. One screen.
-- **Layer 2 — the Rooms** (`rooms/*/CONTEXT.md`): loaded when you enter a stage of work.
-- **Layer 3 — the Skills** (`skills/*/SKILL.md`): loaded only when a task needs that capability.
+## Who sees what (the access model)
+Access is real and enforced at the database (row-level security) — not a UI trick. Try it in the demo with **View as**.
 
-Relay never loads everything. It reads the map, walks to the room the work is in, and picks up the one skill it needs. That's how a folder stays inside a context window and still behaves like a deep specialist.
+| | Executive | Member | Client (external) |
+|---|---|---|---|
+| Their spaces | all + Executive | client spaces only | **their own, only** |
+| Board, tasks, replies | ✅ | ✅ | ✅ (their workspace) |
+| Run / complete / AI actions | ✅ | ✅ | ❌ (they ask + approve) |
+| Cockpit · Analytics · Admin | ✅ | partial | ❌ |
+| Sees other clients / Executive | ✅ | ❌ | ❌ |
 
-**The recursion:** Relay is an ICM-defined agent that *operates on* an ICM-structured studio. ICM all the way down — the methodology runs the worker *and* models the work.
+## Clients are engagements
+A client isn't a request inbox — it's a **signed engagement** with a lifecycle: diagnostic intake → tier (Express / Standard / Build / Retainer) → a 7-phase delivery → handoff → retainer. Each client logs into their own portal: **Overview** (phase + next meeting/invoice) · **Board** (open a request, reply to the studio) · **Deliverables** (approve / request changes) · **Files** · **Goals** · **Meetings** (book a Google Meet) · **Billing**.
 
----
+## What's real vs. this demo
+The demo is a faithful, IP-safe **slice** on fabricated data (two clients: Northwind, Acme). The full command center adds the deep backend:
 
-## Use it in 60 seconds
+| In the demo | In the full system |
+|---|---|
+| Fabricated clients + data | Real engagements synced from a live CRM |
+| Simulated presence / chat | Supabase Auth + realtime; everyone has a login |
+| Lane Protocol runs offline | Claude reads the actual folder (incl. site files) |
+| Calendar / Costs / Decisions explained | Google Calendar → billing, Stripe, decision log |
+| One studio | Multiple businesses, fully separated by org + RLS |
 
-1. **Drop the folder into a Claude Project** (or paste the files into a chat). Claude reads `CLAUDE.md` → `identity.md` → `rules.md` automatically.
-2. **Talk to it like a client or an operator:**
-   - *"Change the Northwind homepage headline to mention same-day quotes."* → it CLEARs it.
-   - *"Push the pricing page live."* → it ESCALATES with a recommendation.
-   - *"Where are we this morning?"* → it gives you the board.
-3. **Point it at your own studio.** Replace `studio/` with one folder per real client (copy the `northwind/` shape). Add your routine request types to `reference/playbook.md`. That's the whole setup — no database, no account, no install.
+## Use the specialist yourself
+The ICM folder *is* the agent — no install:
+1. Drop this folder into a **Claude Project** (or paste the files into a chat). Claude reads `CLAUDE.md → identity.md → rules.md` automatically.
+2. Talk to it like an operator or a client: *"change the Northwind headline to mention same-day quotes"* → it CLEARs it; *"push the pricing page live"* → it ESCALATES with a recommendation.
+3. Point it at your own studio: copy the `studio/clients/northwind/` shape per real client and add your routine request types to `reference/playbook.md`. No database, no account.
 
-## Try the demo
-The `studio/` folder is a working, fabricated studio (two clients, real-feeling requests). Run the prompts in [`tests/tests.md`](tests/tests.md) against it and watch the lanes behave. No setup, no cost.
+## Run the demo locally
+```bash
+cd playroom
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # static export → ./out (deploy anywhere)
+```
+Node 20–24 · Next.js · static export · no backend. See [`playroom/README.md`](playroom/README.md).
 
-## What stays yours
-Relay ships the *methodology* — a folder. Your real clients, real revenue, and real deliverables never live here. Point it at your own files and they stay your files.
+## What's in this repo
+- **`brief.md`** — the competition brief (treat-yourself-as-the-client).
+- **The ICM specialist** — `identity.md`, `rules.md`, `examples.md`, `CLAUDE.md`, `reference/`, `rooms/`, `skills/`, `patterns/`, `tests/`, `studio/`.
+- **`playroom/`** — the full Next.js demo (the live site's source).
+- **`assets/`** — diagrams.
 
----
+## The methodology — ICM
+Relay is built on **Interpretable Context Methodology**: a folder structure where a `CLAUDE.md` map routes to context "rooms" and reusable "skills," so a plain folder behaves like a deep, auditable specialist. The methodology is shared openly — take the pattern.
 
 ## License
-Split:
-- **The methodology** (this ICM folder — `identity.md`, `rules.md`, `examples.md`, `reference/`, …) is shared **openly** — take the pattern and build your own studio on it.
-- **The Relay™ application and brand** (the `playroom/` demo + its code) are **proprietary, evaluation-only** — see [`playroom/LICENSE`](playroom/LICENSE). View it, run it; don't reproduce, rebrand, or commercialize it. The real product stays private.
+**Split:**
+- **The methodology** (this ICM folder) is **open** — take the pattern, build your own studio on it.
+- **The Relay™ application and brand** (`playroom/` + its code) are **proprietary, evaluation-only** — see [`playroom/LICENSE`](playroom/LICENSE). View it, run it; don't reproduce, rebrand, or commercialize it. The real product stays private.
 
-Relay™ — © 2026. All rights reserved.
+<p align="center"><sub>Relay™ · © 2026 · a demo of what's possible — not the production product.</sub></p>

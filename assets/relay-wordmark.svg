@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 44" fill="none">
+  <style>
+    .ink{fill:#0B0B0C}.st{stroke:#0B0B0C}
+    @media (prefers-color-scheme:dark){.ink{fill:#ffffff}.st{stroke:#ffffff}}
+  </style>
+  <g transform="translate(2,2)">
+    <circle cx="11" cy="11" r="4.6" class="st" stroke-width="3"/>
+    <path d="M11 15.6V29h13.4" class="st" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="29" cy="29" r="4.6" fill="#A4561F"/>
+  </g>
+  <text x="52" y="30" font-family="'DM Sans','Helvetica Neue',Arial,sans-serif" font-size="23" font-weight="600" letter-spacing="6.5" class="ink">REL<tspan fill="#A4561F">A</tspan>Y</text>
+  <text x="200" y="15" font-family="Arial,sans-serif" font-size="9" class="ink" opacity="0.55">™</text>
+</svg>
