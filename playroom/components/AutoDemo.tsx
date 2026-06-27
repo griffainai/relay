@@ -5,7 +5,7 @@ import { sortRequest, bakedCompletion } from "@/lib/lane";
 import { spaceBySlug, SEED_TASKS } from "@/lib/studio";
 import { RelayMark } from "./RelayMark";
 
-type Phase = "off" | "hook" | "play" | "educate" | "terminal" | "finale";
+type Phase = "off" | "pitch" | "play" | "educate" | "terminal" | "finale";
 type Dispatch = ReturnType<typeof useStore>["dispatch"];
 interface Rect { top: number; left: number; width: number; height: number }
 
@@ -134,6 +134,18 @@ const TERM: { t: string; k: string }[] = [
   { t: "Because the whole folder was here, I didn't ask a single question — I just did the work.", k: "summary" },
 ];
 
+// the 60-second Grand-Slam pitch (backstory + value equation, in the studio's voice)
+const PITCH: { big: string; sub: string }[] = [
+  { big: "Two people. Eight companies. One board.", sub: "This is the system they actually run it on — not a mockup." },
+  { big: "They were drowning.", sub: "Work scattered across Slack, docs, and eight separate folders. No way to see what was dying — or what needed them next." },
+  { big: "They tried the enterprise-platform trap.", sub: "Role matrices, dashboards, the works. Scrapped it. The real problem was never features — it was operating discipline." },
+  { big: "So they built the opposite — a folder.", sub: "Every task, message, decision, and deliverable is a markdown file they own. The board is the work. The files are the truth. If the app dies, the work lives." },
+  { big: "And the work doesn't just get tracked. It gets done.", sub: "Clients ask in plain language. The routine clears itself. You only touch the 20% that needs a human." },
+  { big: "It isn't a concept.", sub: "It runs a real studio — real clients, real revenue. Point Claude at the folder and it works your queue. Files you own, no lock-in." },
+  { big: "Built for themselves first.", sub: "If it's sharp enough for two people running eight companies, it's sharp enough for your team." },
+  { big: "This is Relay.", sub: "The work finishes itself." },
+];
+
 export function AutoDemo() {
   const { dispatch } = useStore();
   const [phase, setPhase] = useState<Phase>("off");
@@ -142,12 +154,24 @@ export function AutoDemo() {
   const [rect, setRect] = useState<Rect | null>(null);
   const [edu, setEdu] = useState(0);
   const [term, setTerm] = useState(0);
+  const [slide, setSlide] = useState(0);
 
   useEffect(() => {
     let seen = false;
     try { seen = sessionStorage.getItem("relay-demo-seen") === "1"; } catch {}
-    if (!seen) { const t = setTimeout(() => setPhase("hook"), 900); return () => clearTimeout(t); }
+    if (!seen) { const t = setTimeout(() => setPhase("pitch"), 900); return () => clearTimeout(t); }
   }, []);
+
+  // pitch auto-advance → flows into the walkthrough
+  useEffect(() => {
+    if (phase !== "pitch") return;
+    const last = slide >= PITCH.length - 1;
+    const t = setTimeout(() => {
+      if (last) { setBeat(0); setEdu(0); setTerm(0); setPaused(false); setPhase("play"); }
+      else setSlide((s) => s + 1);
+    }, last ? 7000 : 5200);
+    return () => clearTimeout(t);
+  }, [phase, slide]);
   const markSeen = () => { try { sessionStorage.setItem("relay-demo-seen", "1"); } catch {} };
 
   // simulate "you pasted Claude's completion note back" — a manual, human-marked completion
@@ -199,26 +223,40 @@ export function AutoDemo() {
 
   const stop = () => { markSeen(); setPhase("off"); };
   const start = () => { setBeat(0); setEdu(0); setTerm(0); setPaused(false); setPhase("play"); };
+  const openPitch = () => { setSlide(0); setPhase("pitch"); };
 
   if (phase === "off") {
     return (
-      <button onClick={() => setPhase("hook")} className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-ink text-paper rounded-full pl-4 pr-5 py-2.5 shadow-xl hover:opacity-90 animate-lane-in">
-        <span className="text-clay">▶</span><span className="text-[13px] font-medium">Watch the guided demo</span>
+      <button onClick={openPitch} className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-ink text-paper rounded-full pl-4 pr-5 py-2.5 shadow-xl hover:opacity-90 animate-lane-in">
+        <span className="text-clay">▶</span><span className="text-[13px] font-medium">Watch the pitch + demo</span>
       </button>
     );
   }
 
-  if (phase === "hook") {
+  if (phase === "pitch") {
+    const s = PITCH[slide];
+    const last = slide >= PITCH.length - 1;
     return (
       <Overlay dark>
         <div className="max-w-2xl text-center">
-          <div className="flex justify-center mb-6 text-white"><RelayMark size={46} /></div>
-          <h1 className="text-white text-4xl md:text-5xl font-light leading-[1.1] tracking-tight mb-4">You're about to watch a studio <span className="text-clay">run itself.</span></h1>
-          <p className="text-white/70 text-lg mb-8">Not a to-do list — a new way for a small team to actually <em className="text-white not-italic font-medium">do</em> the work, together with AI. A slow, guided walkthrough: first a teammate works a task by hand, then Claude runs the whole folder.</p>
-          <div className="flex gap-3 justify-center">
-            <button onClick={start} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">▶ Start the walkthrough</button>
-            <button onClick={stop} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Already seen it — skip →</button>
-          </div>
+          <div className="flex justify-center mb-8 text-white"><RelayMark size={44} /></div>
+          <div className="eyebrow text-clay mb-4">The backstory · {slide + 1}/{PITCH.length}</div>
+          <h1 key={slide} className="text-white text-4xl md:text-5xl font-light leading-[1.12] tracking-tight mb-5 animate-lane-in">{s.big}</h1>
+          <p className="text-white/70 text-lg leading-relaxed max-w-xl mx-auto mb-9">{s.sub}</p>
+          {last ? (
+            <div className="flex gap-3 justify-center">
+              <button onClick={start} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">See how it works →</button>
+              <button onClick={stop} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Skip — explore myself</button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4 justify-center">
+              <button onClick={() => setSlide((x) => Math.max(0, x - 1))} className="text-white/50 hover:text-white text-[14px]" aria-label="Back">◀</button>
+              <div className="flex gap-1.5">{PITCH.map((_, i) => <span key={i} className="h-1 rounded-full transition-all" style={{ width: i === slide ? 16 : 6, background: i === slide ? "var(--clay)" : "rgba(255,255,255,0.25)" }} />)}</div>
+              <button onClick={() => setSlide((x) => x + 1)} className="text-white/50 hover:text-white text-[14px]" aria-label="Next">▶</button>
+              <span className="w-px h-4 bg-white/20" />
+              <button onClick={start} className="text-[12px] text-white/50 hover:text-white">Skip intro →</button>
+            </div>
+          )}
         </div>
       </Overlay>
     );
@@ -310,7 +348,7 @@ export function AutoDemo() {
         <p className="text-white/70 text-[16px] leading-relaxed mb-8">The full system adds real logins for every client, multiple businesses kept fully separate, a calendar that drives billing, a costs board, decisions, and org admin. We kept this demo deliberately specific so it stays clear and didn't go overboard. This is a new way for a team to actually <em className="text-white not-italic font-medium">do</em> the work — not just track it. The folder is the product; the product is yours.</p>
         <div className="flex gap-3 justify-center">
           <button onClick={stop} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">Explore it yourself →</button>
-          <button onClick={start} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Replay</button>
+          <button onClick={openPitch} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Replay from the top</button>
         </div>
         <div className="text-white/40 text-[11px] mt-8">Relay™ · © 2026 · a demo of what's possible — not the production product.</div>
       </div>
