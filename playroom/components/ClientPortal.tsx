@@ -97,7 +97,7 @@ function PhaseBar({ phase }: { phase: string }) {
 function Overview({ eng }: any) {
   return (
     <div className="space-y-6">
-      <div><h1 className="text-[26px] font-light tracking-tight mb-1">Hi Dana — here's where we are.</h1><p className="text-[13.5px] text-muted">Your engagement with the studio, start to finish.</p></div>
+      <div><h1 className="text-[26px] font-light tracking-tight mb-1">Hi {(eng.contact || "there").split(" ")[0]} — here's where we are.</h1><p className="text-[13.5px] text-muted">Your engagement with the studio, start to finish.</p></div>
       <div className="rounded-lg border border-line bg-paper p-4"><div className="eyebrow text-muted mb-2.5">Delivery phase</div><PhaseBar phase={eng.phase} /><div className="text-[12px] text-muted mt-3">Status: <span className="text-ink-2">{eng.status}</span> · started {eng.startedAt}</div></div>
       <div className="grid grid-cols-3 gap-3"><Stat label="Next meeting" value={eng.nextMeeting ?? "—"} /><Stat label="Next invoice" value={eng.nextInvoice ?? "—"} /><Stat label="Plan" value={eng.tier} /></div>
     </div>

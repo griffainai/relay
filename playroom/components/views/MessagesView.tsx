@@ -88,7 +88,7 @@ export function MessagesView() {
         </div>
         <div className="border-t border-line p-3">
           <div className="flex gap-2">
-            <input value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => e.key === "Enter" && send()} placeholder="Message…  (try /task, /remind, @mention)" className="flex-1 bg-soft border border-line rounded-md px-3 py-2 text-[13.5px] text-ink outline-none" />
+            <input value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => e.key === "Enter" && send()} placeholder="Message the channel…" className="flex-1 bg-soft border border-line rounded-md px-3 py-2 text-[13.5px] text-ink outline-none" />
             <button onClick={send} className="px-3.5 py-2 rounded-md bg-ink text-paper text-[13px] font-medium">Send</button>
           </div>
         </div>

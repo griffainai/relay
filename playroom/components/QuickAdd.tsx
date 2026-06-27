@@ -13,6 +13,7 @@ export function QuickAdd() {
   const [flash, setFlash] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const spaces = accessibleSpaces(state.role).filter((s) => s.kind === "client" || state.role === "exec");
+  const effSlug = spaces.some((s) => s.slug === slug) ? slug : (spaces[0]?.slug ?? slug); // stay valid across datasets
 
   useEffect(() => {
     if (state.quickAdd) {
@@ -28,7 +29,7 @@ export function QuickAdd() {
     if (!text.trim()) return;
     const task: Task = {
       id: `t-${++counter}`,
-      spaceSlug: slug,
+      spaceSlug: effSlug,
       projectName: "Captured",
       title: text.trim().slice(0, 60),
       description: text.trim(),
@@ -62,7 +63,7 @@ export function QuickAdd() {
           className="w-full bg-soft border border-line rounded-md px-3 py-2.5 text-[14px] text-ink outline-none mb-2"
         />
         <div className="flex items-center gap-2">
-          <select value={slug} onChange={(e) => setSlug(e.target.value)} className="bg-soft border border-line rounded-md px-2 py-1.5 text-[12.5px] text-ink-2 outline-none">
+          <select value={effSlug} onChange={(e) => setSlug(e.target.value)} className="bg-soft border border-line rounded-md px-2 py-1.5 text-[12.5px] text-ink-2 outline-none">
             {spaces.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
           </select>
           <select value={priority} onChange={(e) => setPriority(e.target.value as Priority)} className="bg-soft border border-line rounded-md px-2 py-1.5 text-[12.5px] text-ink-2 outline-none">
