@@ -19,29 +19,41 @@ interface Beat {
 }
 
 const BEATS: Beat[] = [
-  { chapter: "Clients are folders", title: "Every client is a folder.", dur: 6000, selector: '[data-demo="rail"]',
+  { chapter: "Clients are folders", title: "Every client is a folder.", dur: 5800, selector: '[data-demo="rail"]',
     text: "Northwind and Acme each have their own folder — all of their work, files, voice, and rules live inside it.",
-    action: (d) => { d({ type: "role", role: "exec" }); d({ type: "space", slug: "all" }); d({ type: "view", view: "board" }); d({ type: "select", id: undefined }); d({ type: "update", id: "t-102", patch: { status: "outstanding", completionNote: undefined, completedBy: undefined, completedAt: undefined, deliverable: undefined, assignee: "jay", assignedBy: "shaq" } }); } },
-  { chapter: "A teammate hands you work", title: "Your co-founder sends you a task.", dur: 6200, selector: '[data-demo="board"]',
-    text: "Sam needs a website edit for Northwind, so he files it to you. It lands right on your board.",
-    action: (d) => { d({ type: "space", slug: "all" }); d({ type: "select", id: undefined }); } },
-  { chapter: "You do it", title: "Open the task.", dur: 6000, selector: '[data-demo="panel"]',
-    text: "You click it. Everything about it — the client's voice, the rules, the guardrails — comes from that client's folder.",
-    action: (d) => { d({ type: "space", slug: "northwind" }); d({ type: "select", id: "t-102" }); d({ type: "detailTab", tab: "details" }); } },
+    action: (d) => { d({ type: "role", role: "exec" }); d({ type: "space", slug: "all" }); d({ type: "view", view: "board" }); d({ type: "select", id: undefined }); d({ type: "update", id: "t-510", patch: { status: "outstanding", completionNote: undefined, completedBy: undefined, completedAt: undefined, deliverable: undefined } }); } },
+
+  // ── the many ways work shows up ──
+  { chapter: "How work shows up", title: "A client files their own request.", dur: 6200, selector: '[data-demo="client-input"]',
+    text: "First way: the client asks, in plain language — no login, no tool. They only ever see their own requests.",
+    action: (d) => d({ type: "role", role: "client" }) },
+  { chapter: "How work shows up", title: "A co-founder assigns you a task.", dur: 6200, selector: '[data-demo="panel"]',
+    text: "Second way: your co-founder Sam files one and assigns it to you — “finalize the hero copy.”",
+    action: (d) => { d({ type: "role", role: "exec" }); d({ type: "space", slug: "northwind" }); d({ type: "select", id: "t-510" }); d({ type: "detailTab", tab: "details" }); } },
+  { chapter: "How work shows up", title: "…or files one for himself.", dur: 5800, selector: '[data-demo="panel"]',
+    text: "Third way: a co-founder logs a task for himself — like staging the Acme deploy.",
+    action: (d) => { d({ type: "space", slug: "acme-studio" }); d({ type: "select", id: "t-511" }); } },
+  { chapter: "How work shows up", title: "…or you jot a memo for yourself.", dur: 5800, selector: '[data-demo="panel"]',
+    text: "Fourth way: tasks aren't only client work — drop a memo for yourself too. Same board for clients, your partner, and you.",
+    action: (d) => { d({ type: "space", slug: "northwind" }); d({ type: "select", id: "t-512" }); } },
+
+  // ── do the one Sam sent you, by hand ──
   { chapter: "You do it", title: "Copy the prompt.", dur: 6400, selector: '[data-demo="panel"]',
-    text: "Relay assembles the exact instructions from the folder — the request, the client's voice, the do-not-cross lines. One click to copy." },
+    text: "Let's do the one Sam sent you. Relay assembles the exact instructions from the folder — the request, the client's voice, the do-not-cross lines. One click to copy.",
+    action: (d) => { d({ type: "select", id: "t-510" }); d({ type: "detailTab", tab: "details" }); } },
   { chapter: "You do it", title: "Run it in Claude.", dur: 6600, selector: '[data-demo="panel"]',
     text: "Paste it into Claude. Because the client's folder holds the actual website files, Claude makes the real edit — not a suggestion." },
-  { chapter: "You do it", title: "Paste the note. Done.", dur: 6400, selector: '[data-demo="panel"]',
+  { chapter: "You do it", title: "Paste the note. Done.", dur: 6200, selector: '[data-demo="panel"]',
     text: "Drop Claude's result back on the task and mark it complete — it moves to Done. That's the whole loop, by hand.",
-    action: (_d, h) => h.done("t-102") },
+    action: (_d, h) => h.done("t-510") },
+
   { chapter: "The guardrail", title: "Some things you escalate — never auto-do.", dur: 6400, selector: '[data-demo="panel"]',
     text: "Publishing a page or changing pricing is off-limits. Relay flags those for a human, with a recommendation. It never crosses that line.",
     action: (d) => { d({ type: "select", id: "t-104" }); d({ type: "detailTab", tab: "details" }); } },
   { chapter: "You + your team", title: "You and your partner, on one board.", dur: 6000, selector: '[data-demo="panel"]',
     text: "Relay flagged Alex; Alex pulled in Sam. The whole handoff lives on the task — two people and the AI, in one place.",
     action: (d) => d({ type: "detailTab", tab: "conversation" }) },
-  { chapter: "You own it", title: "It's all just files you own.", dur: 6200, selector: '[data-demo="panel"]',
+  { chapter: "You own it", title: "It's all just files you own.", dur: 6000, selector: '[data-demo="panel"]',
     text: "Every card is a markdown file. The board IS the folder — nothing is trapped inside an app.",
     action: (d) => { d({ type: "select", id: "t-101" }); d({ type: "fileMode", on: true }); } },
   { chapter: "Who sees what", title: "Different people, different views.", dur: 6200, selector: '[data-demo="role"]',
@@ -95,7 +107,7 @@ export function AutoDemo() {
     const seed = SEED_TASKS.find((t) => t.id === id);
     const space = seed && spaceBySlug(seed.spaceSlug);
     const r = seed && space ? bakedCompletion(seed.description, sortRequest(seed.description), space) : {};
-    dispatch({ type: "update", id, patch: { status: "complete", completedBy: "jay", completedAt: "just now", deliverable: (r as any).deliverable, completionNote: "Ran it in Claude → pasted the note. Headline updated (3 options, #1). Reversible." } });
+    dispatch({ type: "update", id, patch: { status: "complete", completedBy: "jay", completedAt: "just now", deliverable: (r as any).deliverable, completionNote: "Ran it in Claude → pasted the note. Hero copy finalized (3 options, #1 recommended). Reversible." } });
   };
 
   useEffect(() => {

@@ -118,6 +118,7 @@ export function TaskPanel({ t }: { t: Task }) {
                   <Field label="Assignee"><span className="flex items-center gap-1.5"><Avatar id={t.assignee} size={16} />{person(t.assignee)?.name ?? "Unassigned"}</span></Field>
                   <Field label="Priority">{PRIORITY_PILL[t.priority]?.label ?? "Low"}</Field>
                   <Field label="Status">{t.status}</Field>
+                  <div className="col-span-2"><Field label="Filed by">{t.filedBy}</Field></div>
                 </div>
 
                 {t.labels.length > 0 && (
