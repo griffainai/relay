@@ -6,7 +6,8 @@ import { TaskChip } from "./StatusChip";
 import { Markdown } from "./Markdown";
 import { taskToMarkdown } from "@/lib/serialize";
 import { person, LABELS } from "@/lib/studio";
-import { spaceBySlug } from "@/lib/datasets";
+import { spaceBySlug, engagementFor } from "@/lib/datasets";
+import { runTaskLive } from "@/lib/claude";
 import { PRIORITY_PILL } from "@/lib/board";
 import type { DetailTab } from "@/lib/store";
 import type { Task } from "@/lib/types";
@@ -33,6 +34,26 @@ export function TaskPanel({ t }: { t: Task }) {
   const [note, setNote] = useState("");
   const [draft, setDraft] = useState("");
   const [copied, setCopied] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [err, setErr] = useState("");
+
+  const runLive = async () => {
+    if (!state.apiKey) { dispatch({ type: "connect", on: true }); return; }
+    setErr(""); setRunning(true);
+    try {
+      const r = await runTaskLive({ apiKey: state.apiKey, task: t, space, engagement: engagementFor(t.spaceSlug) });
+      if (r.lane === "hold") {
+        dispatch({ type: "update", id: t.id, patch: { status: "waiting-on", holdQuestion: r.question || "One question before I proceed.", reason: "Claude (live) held it — needs one answer." } });
+      } else if (r.lane === "escalate") {
+        dispatch({ type: "update", id: t.id, patch: { status: "outstanding", assignee: "jay", escalation: r.escalation || "Needs a human.", reason: "Claude (live) escalated it." } });
+      } else {
+        dispatch({ type: "update", id: t.id, patch: { status: "complete", completedBy: "relay", completedAt: "just now · live", completionNote: `${r.note || "Done."}\n\n— Claude, live, on your key`, deliverable: r.deliverable ?? t.deliverable } });
+      }
+    } catch (e: any) {
+      setErr(e?.message || "Couldn't reach Claude — check your key/connection.");
+    }
+    setRunning(false);
+  };
 
   const tab = state.detailTab;
   const setTab = (x: DetailTab) => dispatch({ type: "detailTab", tab: x });
@@ -178,15 +199,22 @@ export function TaskPanel({ t }: { t: Task }) {
                   </div>
                 )}
 
-                {/* Run it with Claude — the honest manual flow */}
+                {/* Run it with Claude — live (your key) or the manual flow */}
                 <div className="rounded-md border border-clay/30 bg-clay/[0.03] p-3">
                   <div className="eyebrow text-clay mb-1.5">Run it with Claude</div>
-                  <p className="text-[11.5px] text-muted mb-2">Copy the prompt → paste it into Claude → it does the work → paste the completion note above. (Or upload the whole client folder to the cloud to run them all.)</p>
+                  <p className="text-[11.5px] text-muted mb-2">Run it <strong className="text-ink-2">live on your own key</strong> right here — real Claude reads the folder and does it. Or copy the prompt and run it in Claude yourself, then paste the note above. (Or hand the whole client folder to the cloud to run them all.)</p>
                   <div className="flex flex-wrap gap-1.5">
-                    <button onClick={copyPrompt} className="text-[11.5px] font-medium bg-clay text-white rounded-md px-2.5 py-1 hover:opacity-90">{copied ? "Copied ✓" : "Copy prompt"}</button>
+                    <button onClick={runLive} disabled={running} className="text-[11.5px] font-medium bg-ink text-paper rounded-md px-2.5 py-1 hover:opacity-90 disabled:opacity-50">{running ? "Claude is working…" : "▶ Run live with Claude"}</button>
+                    <button onClick={copyPrompt} className="text-[11.5px] font-medium border border-clay/50 text-clay rounded-md px-2.5 py-1 hover:bg-clay/10">{copied ? "Copied ✓" : "Copy prompt"}</button>
                     <ActBtn onClick={genPrompt}>Generate prompt</ActBtn>
                     {t.spaceSlug !== "executive" && <ActBtn onClick={routeExec}>Route to Executive ↑</ActBtn>}
                   </div>
+                  <div className="mt-2 text-[11px]">
+                    {state.apiKey
+                      ? <span className="text-ok">● Live mode on — your key, in your browser. <button onClick={() => dispatch({ type: "connect", on: true })} className="text-muted hover:text-ink underline">change</button></span>
+                      : <button onClick={() => dispatch({ type: "connect", on: true })} className="text-clay hover:underline">Connect your Claude key to run it live →</button>}
+                  </div>
+                  {err && <div className="mt-1.5 text-[11px] text-crit">{err}</div>}
                   {t.agentPrompt && <pre className="mt-2 text-[11px] font-mono text-ink-2 whitespace-pre-wrap leading-relaxed bg-soft/60 rounded p-2 max-h-32 overflow-y-auto">{t.agentPrompt}</pre>}
                 </div>
               </>

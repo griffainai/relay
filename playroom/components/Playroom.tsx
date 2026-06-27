@@ -23,6 +23,7 @@ import { ReviewModal } from "./ReviewModal";
 import { ReviewsWall } from "./ReviewsWall";
 import { FullSystemModal } from "./FullSystemModal";
 import { BetaModal } from "./BetaModal";
+import { ConnectModal } from "./ConnectModal";
 
 function Workspace() {
   const { state, dispatch } = useStore();
@@ -71,6 +72,10 @@ function Workspace() {
 
 function Root() {
   const { state, dispatch } = useStore();
+  // restore a previously connected Claude key (browser-local only)
+  useEffect(() => {
+    try { const k = localStorage.getItem("relay-key"); if (k) dispatch({ type: "key", key: k }); } catch {}
+  }, [dispatch]);
   // invite a review after the visitor has had time to explore
   useEffect(() => {
     const t = setTimeout(() => dispatch({ type: "review", on: true }), 300000);
@@ -86,6 +91,7 @@ function Root() {
       <ReviewsWall />
       <FullSystemModal />
       <BetaModal />
+      <ConnectModal />
     </>
   );
 }

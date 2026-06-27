@@ -44,6 +44,7 @@ So they built the opposite of a platform: a **folder**. Every task, message, dec
 - **An AI operator, not a chatbot.** It sorts every request — 🟢 *clear* / 🟡 *hold* / 🔴 *escalate* — does what's routine, writes a completion note, and refuses what it shouldn't touch (publishing, pricing, anything irreversible).
 - **Three actors on one board.** Operators (you + your partner), clients (their own scoped portal), and the AI — all editing the same files.
 - **Run it two ways.** Work a task by hand (copy the prompt → run it in Claude → paste the note), or hand Claude the whole client folder and it clears the queue autonomously.
+- **Run it *live*.** Open any task → **Run live with Claude** → paste your own Anthropic key and real Claude reads the folder and does it (or escalates). Your key, your folder, your data — it stays in your browser and only ever calls Anthropic. This is the app's core loop, working today.
 
 ## How it works
 

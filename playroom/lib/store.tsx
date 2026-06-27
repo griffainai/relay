@@ -29,6 +29,7 @@ interface State {
   clientTab: string; // client portal tab: overview|work|deliverables|files|goals|meetings|billing
   examples: string | null; // "gallery" | "vignette" | "explore" | "offer" | null
   beta: boolean; // the beta early-access gate
+  connect: boolean; // the "connect your Claude key" modal
 }
 
 type Action =
@@ -50,6 +51,7 @@ type Action =
   | { type: "dataset"; id: string }
   | { type: "examples"; mode: string | null }
   | { type: "beta"; on: boolean }
+  | { type: "connect"; on: boolean }
   | { type: "typing"; who: PersonId | null }
   | { type: "add"; task: Task }
   | { type: "update"; id: string; patch: Partial<Task> }
@@ -75,6 +77,7 @@ const initial: State = {
   clientTab: "overview",
   examples: null,
   beta: false,
+  connect: false,
 };
 
 function reducer(s: State, a: Action): State {
@@ -121,6 +124,8 @@ function reducer(s: State, a: Action): State {
       return { ...s, examples: a.mode };
     case "beta":
       return { ...s, beta: a.on };
+    case "connect":
+      return { ...s, connect: a.on };
     case "dataset": {
       setActiveDataset(a.id);
       const ds = DATASETS[a.id] ?? DATASETS.studio;
