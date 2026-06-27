@@ -1,4 +1,4 @@
-import type { Label, Operator, Space, Task } from "./types";
+import type { Engagement, Label, Operator, Space, Task } from "./types";
 
 export const OPERATORS: Operator[] = [
   {
@@ -362,3 +362,101 @@ export const PRESETS: { label: string; text: string }[] = [
   { label: "Add a testimonial", text: "Add a testimonial block to the homepage from the approved quotes." },
   { label: "Delete a page", text: "Delete the old blog page." },
 ];
+
+// v3: the engagement behind each client (real Griffain shape, fake numbers)
+export const ENGAGEMENTS: Record<string, Engagement> = {
+  northwind: {
+    slug: "northwind",
+    tier: "Express + Retainer",
+    feeUpfront: 250,
+    mrr: 100,
+    phase: "operate",
+    status: "active-support",
+    contact: "Dana Whitfield",
+    startedAt: "Jun 6, 2026",
+    nextInvoice: "Jul 6 · $100",
+    nextMeeting: "Thu 2:00pm · monthly check-in",
+    health: "active",
+    isa: {
+      problem: "The phone rings, but the website doesn't convert — there's no clear same-day-quote hook.",
+      vision: "Be the same-day-quote HVAC name neighbors in town actually trust.",
+      goal: "Lift homepage quote-requests and rank for “same-day HVAC quote [town].”",
+      constraints: ["No new claims beyond “same-day quotes”", "Never touch the license / insurance text"],
+    },
+    targets: [
+      { label: "Homepage → quote-request conversion", pct: 62 },
+      { label: "Rank top-3 for “same-day HVAC [town]”", pct: 40 },
+    ],
+    scope: [
+      { label: "Site updates", used: 3, total: 4 },
+      { label: "Content posts", used: 1, total: 2 },
+      { label: "Monthly report", used: 0, total: 1 },
+    ],
+    iscs: [
+      { text: "Hero leads with same-day quotes", verified: true },
+      { text: "Footer year + license correct", verified: true },
+      { text: "Quote form above the fold", verified: false },
+      { text: "3 service pages live", verified: false },
+    ],
+    deliverables: [
+      { id: "d1", title: "Hero headline — 3 options", status: "verified", isc: "Hero leads with same-day quotes", ack: "approved" },
+      { id: "d2", title: "Footer year → 2026", status: "verified", ack: "approved" },
+      { id: "d3", title: "Quote-form placement", status: "in-progress", isc: "Quote form above the fold", ack: "pending" },
+    ],
+    files: [
+      { name: "northwind-brand-kit.pdf", kind: "brand", from: "studio" },
+      { name: "engagement-agreement.pdf", kind: "contract", from: "studio" },
+      { name: "hero-headline.md", kind: "deliverable", from: "studio" },
+      { name: "logo-source.svg", kind: "asset", from: "client" },
+    ],
+    meetings: [
+      { title: "Monthly check-in", when: "Thu 2:00pm", link: "meet.google.com/relay-demo", kind: "retainer" },
+    ],
+    invoices: [
+      { label: "Upfront — Express build", amount: 250, status: "paid", date: "Jun 6" },
+      { label: "Retainer — June", amount: 100, status: "paid", date: "Jun 6" },
+      { label: "Retainer — July", amount: 100, status: "upcoming", date: "Jul 6" },
+    ],
+  },
+  "acme-studio": {
+    slug: "acme-studio",
+    tier: "Build",
+    feeUpfront: 6500,
+    phase: "build",
+    status: "active-production",
+    contact: "Acme Studio",
+    startedAt: "Jun 1, 2026",
+    nextMeeting: "Tue 11:00am · 50% build review",
+    health: "active",
+    isa: {
+      problem: "The portfolio site is dated and doesn't reflect the studio's actual work.",
+      vision: "A minimal site that lets the work speak for itself.",
+      goal: "Ship the refreshed multi-page site.",
+      constraints: ["Keep the existing type system", "Never alter project credits"],
+    },
+    targets: [{ label: "Build complete", pct: 55 }],
+    iscs: [
+      { text: "Services page meta written", verified: true },
+      { text: "Testimonial block on homepage", verified: false },
+      { text: "All project credits intact", verified: true },
+      { text: "Responsive QC pass", verified: false },
+    ],
+    deliverables: [
+      { id: "a1", title: "Services meta description", status: "verified", ack: "approved" },
+      { id: "a2", title: "Homepage testimonial block", status: "in-progress", isc: "Testimonial block on homepage", ack: "pending" },
+    ],
+    files: [
+      { name: "acme-brand-system.pdf", kind: "brand", from: "studio" },
+      { name: "build-agreement.pdf", kind: "contract", from: "studio" },
+    ],
+    meetings: [{ title: "50% build review", when: "Tue 11:00am", link: "meet.google.com/relay-demo", kind: "kickoff" }],
+    invoices: [
+      { label: "Upfront — 50%", amount: 3250, status: "paid", date: "Jun 1" },
+      { label: "Final — 50%", amount: 3250, status: "upcoming", date: "on handoff" },
+    ],
+  },
+};
+
+export function engagementFor(slug: string): Engagement | undefined {
+  return ENGAGEMENTS[slug];
+}

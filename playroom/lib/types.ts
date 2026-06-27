@@ -113,3 +113,36 @@ export interface Label {
 export function needsYou(t: Task): boolean {
   return t.status !== "complete" && !!t.escalation;
 }
+
+// ───────── v3: client engagements (the real Griffain model) ─────────
+export type Phase = "observe" | "think" | "feel" | "experiment" | "build" | "learn" | "operate";
+export const PHASES: Phase[] = ["observe", "think", "feel", "experiment", "build", "learn", "operate"];
+
+export interface ScopeItem { label: string; used: number; total: number }
+export interface Isc { text: string; verified: boolean }
+export interface EngDeliverable { id: string; title: string; status: "todo" | "in-progress" | "verified"; isc?: string; ack: "pending" | "approved" | "changes" }
+export interface EngFile { name: string; kind: string; from: "studio" | "client" }
+export interface EngMeeting { title: string; when: string; link?: string; kind: string }
+export interface EngInvoice { label: string; amount: number; status: "paid" | "upcoming" | "overdue"; date: string }
+
+export interface Engagement {
+  slug: string;
+  tier: string; // Express | Standard | Build | Retainer | "Express + Retainer"
+  feeUpfront?: number;
+  mrr?: number;
+  phase: Phase;
+  status: string; // active-production | active-support | completed
+  contact: string;
+  startedAt: string;
+  nextInvoice?: string;
+  nextMeeting?: string;
+  health: "active" | "at-risk" | "churn-risk";
+  isa: { problem: string; vision: string; goal: string; constraints: string[] };
+  targets: { label: string; pct: number }[];
+  scope?: ScopeItem[]; // retainer cycle scope (null for build)
+  iscs: Isc[];
+  deliverables: EngDeliverable[];
+  files: EngFile[];
+  meetings: EngMeeting[];
+  invoices: EngInvoice[];
+}

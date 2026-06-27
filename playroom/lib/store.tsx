@@ -25,6 +25,7 @@ interface State {
   review: boolean;
   wall: boolean; // public reviews wall
   fullSystem: string | null; // which "in the full system" feature explainer is open
+  clientTab: string; // client portal tab: overview|work|deliverables|files|goals|meetings|billing
 }
 
 type Action =
@@ -42,6 +43,7 @@ type Action =
   | { type: "review"; on: boolean }
   | { type: "wall"; on: boolean }
   | { type: "fullSystem"; key: string | null }
+  | { type: "clientTab"; tab: string }
   | { type: "typing"; who: PersonId | null }
   | { type: "add"; task: Task }
   | { type: "update"; id: string; patch: Partial<Task> }
@@ -63,6 +65,7 @@ const initial: State = {
   review: false,
   wall: false,
   fullSystem: null,
+  clientTab: "overview",
 };
 
 function reducer(s: State, a: Action): State {
@@ -103,6 +106,8 @@ function reducer(s: State, a: Action): State {
       return { ...s, wall: a.on };
     case "fullSystem":
       return { ...s, fullSystem: a.key };
+    case "clientTab":
+      return { ...s, clientTab: a.tab };
     case "typing":
       return { ...s, typing: a.who };
     case "add":
