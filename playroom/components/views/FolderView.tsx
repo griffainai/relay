@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { activeSpaces, engagementFor } from "@/lib/datasets";
 import { taskToMarkdown } from "@/lib/serialize";
+import { CraftNote } from "../CraftNote";
 import type { Task } from "@/lib/types";
 
 interface Node { name: string; path: string; type: "dir" | "file"; children?: Node[]; content?: string }
@@ -80,6 +81,7 @@ export function FolderView() {
       <div className="px-6 pt-6 pb-3 shrink-0">
         <h2 className="text-[22px] font-light tracking-tight text-ink mb-1">It's all folders.</h2>
         <p className="text-[13.5px] text-ink-2 max-w-2xl">Every single thing you've used — every request, deliverable, goal, message, invoice, meeting, and the AI itself — is a markdown file in a folder you own. No database is the source of truth. <span className="text-ink">This is the entire product, as files.</span> Click any file.</p>
+        <div className="mt-3 max-w-2xl"><CraftNote /></div>
       </div>
       <div className="flex-1 flex overflow-hidden border-t border-line">
         <div className="w-[300px] shrink-0 border-r border-line overflow-y-auto py-2 bg-soft/30">

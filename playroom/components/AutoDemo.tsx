@@ -4,6 +4,7 @@ import { useStore } from "@/lib/store";
 import { sortRequest, bakedCompletion } from "@/lib/lane";
 import { SEED_TASKS } from "@/lib/studio";
 import { spaceBySlug } from "@/lib/datasets";
+import { SCHOOL } from "@/lib/promo";
 import { RelayMark } from "./RelayMark";
 
 type Phase = "off" | "pitch" | "play" | "educate" | "terminal" | "finale";
@@ -210,7 +211,7 @@ export function AutoDemo() {
 
   useEffect(() => {
     if (phase !== "educate") return;
-    const t = setTimeout(() => (edu >= 2 ? setPhase("terminal") : setEdu((e) => e + 1)), 5200);
+    const t = setTimeout(() => (edu >= 3 ? setPhase("terminal") : setEdu((e) => e + 1)), 5200);
     return () => clearTimeout(t);
   }, [phase, edu]);
 
@@ -306,17 +307,18 @@ export function AutoDemo() {
       { k: "The turn", t: "Everything you saw is a folder of markdown.", b: "One folder per client — including the website files. Point Claude at a client's folder and it knows that client's work, rules, and voice. The files are the source of truth." },
       { k: "Three layers", t: "Interpretable Context Methodology", b: "**Map** (CLAUDE.md) routes the agent · **Rooms** (CONTEXT.md) load per stage · **Skills** load only when a task needs one. The folder behaves like a deep specialist without loading everything." },
       { k: "The engine", t: "rules.md literally runs this.", b: "The Lane Protocol — clear / hold / escalate — is the same logic whether a human works a task by hand or Claude runs the whole folder. The methodology isn't documentation *about* the product. It **is** the product." },
+      { k: "The real work", t: "The platform is the structure. The folder is the substance.", b: "Everything you just saw is the **structure** — and it's the easy part. Claude is only ever as good as the folder you hand it. The context, the standards, the taste, the examples of “good” you put in the folder *is* the work. Thin folder, thin output. Crafted folder — real design direction and all — work you'd actually ship. **That craft is the skill. It's the methodology, ICM.**" },
     ];
     const c = cards[edu];
     return (
       <Overlay>
         <div className="max-w-xl">
-          <div className="eyebrow text-clay mb-3">Under the hood · {edu + 1}/3</div>
+          <div className="eyebrow text-clay mb-3">Under the hood · {edu + 1}/{cards.length}</div>
           <h2 className="text-3xl font-light tracking-tight text-ink mb-3">{c.t}</h2>
           <p className="text-ink-2 text-[15px] leading-relaxed mb-6" dangerouslySetInnerHTML={{ __html: c.b.replace(/\*\*(.+?)\*\*/g, '<strong class="text-ink">$1</strong>') }} />
           <div className="flex items-center gap-2">
             <div className="flex gap-1">{cards.map((_, i) => <span key={i} className="h-1 rounded-full" style={{ width: i === edu ? 18 : 6, background: i === edu ? "var(--clay)" : "var(--line)" }} />)}</div>
-            <button onClick={() => (edu >= 2 ? setPhase("terminal") : setEdu(edu + 1))} className="ml-auto bg-ink text-paper px-4 py-2 rounded-md text-[13px]">{edu >= 2 ? "Now the autonomous way →" : "Next →"}</button>
+            <button onClick={() => (edu >= cards.length - 1 ? setPhase("terminal") : setEdu(edu + 1))} className="ml-auto bg-ink text-paper px-4 py-2 rounded-md text-[13px]">{edu >= cards.length - 1 ? "Now the autonomous way →" : "Next →"}</button>
           </div>
         </div>
       </Overlay>
@@ -356,7 +358,8 @@ export function AutoDemo() {
           <button onClick={stop} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Explore it yourself</button>
           <button onClick={openPitch} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Replay from the top</button>
         </div>
-        <div className="text-white/40 text-[11px] mt-8">Relay™ · © 2026 · a demo of what's possible — not the production product.</div>
+        <p className="text-white/60 text-[13px] mt-7 max-w-xl mx-auto leading-relaxed">The platform is the structure — that's the easy part. The quality comes from the folder you build. <a href={SCHOOL.url} target="_blank" rel="noreferrer" className="text-clay hover:underline">Learn the folder craft (ICM) in {SCHOOL.name} →</a></p>
+        <div className="text-white/40 text-[11px] mt-6">Relay™ · © 2026 · a demo of what's possible — not the production product.</div>
       </div>
     </Overlay>
   );

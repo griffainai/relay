@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import { EXAMPLES, DATASETS, activeDataset } from "@/lib/datasets";
 import { RelayMark } from "./RelayMark";
+import { CraftLine, SchoolPromo } from "./CraftNote";
 
 interface Rect { top: number; left: number; width: number; height: number }
 
@@ -73,6 +74,7 @@ export function ExampleMode() {
             <button onClick={() => dispatch({ type: "examples", mode: "offer" })} className="bg-clay text-white px-5 py-2.5 rounded-lg text-[14px] font-medium hover:opacity-90">See the offer →</button>
             <button onClick={toStudio} className="text-white/60 hover:text-white px-4 py-2.5 text-[14px] border border-white/15 rounded-lg">← Back to the main demo</button>
           </div>
+          <div className="mt-6 pt-5 border-t border-white/10"><CraftLine dark /></div>
         </div>
       </div>
     );
@@ -179,6 +181,7 @@ export function ExampleMode() {
           <button onClick={backToGallery} className="text-white/55 px-4 py-3 text-[13px] hover:text-white">← All examples</button>
           <button onClick={toStudio} className="text-white/55 px-4 py-3 text-[13px] hover:text-white ml-auto">✕ Back to the demo</button>
         </div>
+        <div className="mt-8"><SchoolPromo /></div>
         <div className="text-white/35 text-[11px] mt-7">Relay™ · © 2026 · figures are illustrative — this is the vision, not a price sheet.</div>
       </div>
     </div>
