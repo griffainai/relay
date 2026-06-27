@@ -28,7 +28,6 @@ export function ReviewModal() {
       fetch(FEEDBACK_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(payload) }).catch(() => {});
     }
     setSent(true);
-    setTimeout(close, 1600);
   };
 
   return (
@@ -38,7 +37,8 @@ export function ReviewModal() {
         {sent ? (
           <div className="text-center py-8">
             <div className="text-3xl mb-2">🙏</div>
-            <div className="text-[15px] text-ink font-medium">Thank you — that helps a lot.</div>
+            <div className="text-[15px] text-ink font-medium mb-3">Thank you — that helps a lot.</div>
+            <button onClick={() => { close(); dispatch({ type: "wall", on: true }); }} className="text-[12.5px] text-clay hover:underline">See what people are saying →</button>
           </div>
         ) : (
           <>

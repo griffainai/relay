@@ -166,7 +166,7 @@ export function AutoDemo() {
         <div className="max-w-2xl text-center">
           <div className="flex justify-center mb-6 text-white"><RelayMark size={46} /></div>
           <h1 className="text-white text-4xl md:text-5xl font-light leading-[1.1] tracking-tight mb-4">You're about to watch a studio <span className="text-clay">run itself.</span></h1>
-          <p className="text-white/70 text-lg mb-8">A slow, guided walkthrough — big captions, one step at a time. First how a teammate works it by hand, then how Claude runs the whole folder.</p>
+          <p className="text-white/70 text-lg mb-8">Not a to-do list — a new way for a small team to actually <em className="text-white not-italic font-medium">do</em> the work, together with AI. A slow, guided walkthrough: first a teammate works a task by hand, then Claude runs the whole folder.</p>
           <div className="flex gap-3 justify-center">
             <button onClick={start} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">▶ Start the walkthrough</button>
             <button onClick={stop} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Already seen it — skip →</button>
@@ -259,7 +259,7 @@ export function AutoDemo() {
       <div className="max-w-2xl text-center">
         <div className="flex justify-center mb-6 text-white"><RelayMark size={42} /></div>
         <h2 className="text-white text-3xl md:text-4xl font-light leading-tight tracking-tight mb-4">This is a slice of the real system we run our studio on.</h2>
-        <p className="text-white/70 text-[16px] leading-relaxed mb-8">The methodology scales — to teams, to any folder-based work. The full system adds a calendar that drives billing, a costs board, decisions, and org admin. We kept this demo deliberately specific so it stays clear and didn't go overboard — what you used is the tip of the iceberg. The folder is the product; the product is yours.</p>
+        <p className="text-white/70 text-[16px] leading-relaxed mb-8">The full system adds real logins for every client, multiple businesses kept fully separate, a calendar that drives billing, a costs board, decisions, and org admin. We kept this demo deliberately specific so it stays clear and didn't go overboard. This is a new way for a team to actually <em className="text-white not-italic font-medium">do</em> the work — not just track it. The folder is the product; the product is yours.</p>
         <div className="flex gap-3 justify-center">
           <button onClick={stop} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">Explore it yourself →</button>
           <button onClick={start} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Replay</button>

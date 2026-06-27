@@ -17,6 +17,7 @@ import { ClientPortal } from "./ClientPortal";
 import { AutoDemo } from "./AutoDemo";
 import { Chatbot } from "./Chatbot";
 import { ReviewModal } from "./ReviewModal";
+import { ReviewsWall } from "./ReviewsWall";
 import { FullSystemModal } from "./FullSystemModal";
 
 function Workspace() {
@@ -75,6 +76,7 @@ function Root() {
       <AutoDemo />
       <Chatbot />
       <ReviewModal />
+      <ReviewsWall />
       <FullSystemModal />
     </>
   );

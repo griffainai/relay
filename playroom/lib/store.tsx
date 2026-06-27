@@ -23,6 +23,7 @@ interface State {
   quickAdd: boolean;
   typing: PersonId | null;
   review: boolean;
+  wall: boolean; // public reviews wall
   fullSystem: string | null; // which "in the full system" feature explainer is open
 }
 
@@ -39,6 +40,7 @@ type Action =
   | { type: "cmdk"; on: boolean }
   | { type: "quickAdd"; on: boolean }
   | { type: "review"; on: boolean }
+  | { type: "wall"; on: boolean }
   | { type: "fullSystem"; key: string | null }
   | { type: "typing"; who: PersonId | null }
   | { type: "add"; task: Task }
@@ -59,6 +61,7 @@ const initial: State = {
   quickAdd: false,
   typing: null,
   review: false,
+  wall: false,
   fullSystem: null,
 };
 
@@ -96,6 +99,8 @@ function reducer(s: State, a: Action): State {
       return { ...s, quickAdd: a.on };
     case "review":
       return { ...s, review: a.on };
+    case "wall":
+      return { ...s, wall: a.on };
     case "fullSystem":
       return { ...s, fullSystem: a.key };
     case "typing":

@@ -12,6 +12,8 @@ const WORK: Nav[] = [
 ];
 const SYSTEM: Nav[] = [{ view: "brain", label: "The Brain", hint: "how it thinks" }];
 const LOCKED: { label: string; key: string }[] = [
+  { label: "Login & accounts", key: "login" },
+  { label: "Multiple businesses", key: "businesses" },
   { label: "Calendar", key: "calendar" },
   { label: "Decisions", key: "decisions" },
   { label: "Costs", key: "costs" },

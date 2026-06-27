@@ -60,7 +60,11 @@ export function Chatbot() {
         <input value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => e.key === "Enter" && send()} placeholder="Ask the guide…" className="flex-1 bg-soft border border-line rounded-md px-2.5 py-1.5 text-[13px] text-ink outline-none" />
         <button onClick={send} className="text-[12.5px] bg-ink text-paper px-3 rounded-md">Send</button>
       </div>
-      <button onClick={() => dispatch({ type: "review", on: true })} className="text-[11px] text-clay hover:underline pb-2.5 text-center">★ Rate this demo</button>
+      <div className="flex items-center justify-center gap-3 pb-2.5">
+        <button onClick={() => dispatch({ type: "wall", on: true })} className="text-[11px] text-clay hover:underline">★ See what people say</button>
+        <span className="text-line">·</span>
+        <button onClick={() => dispatch({ type: "review", on: true })} className="text-[11px] text-clay hover:underline">Rate this demo</button>
+      </div>
     </div>
   );
 }
