@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import { sortRequest, bakedCompletion } from "@/lib/lane";
-import { spaceBySlug, SEED_TASKS } from "@/lib/studio";
+import { SEED_TASKS } from "@/lib/studio";
+import { spaceBySlug } from "@/lib/datasets";
 import { RelayMark } from "./RelayMark";
 
 type Phase = "off" | "pitch" | "play" | "educate" | "terminal" | "finale";
@@ -147,7 +148,7 @@ const PITCH: { big: string; sub: string }[] = [
 ];
 
 export function AutoDemo() {
-  const { dispatch } = useStore();
+  const { state, dispatch } = useStore();
   const [phase, setPhase] = useState<Phase>("off");
   const [beat, setBeat] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -226,10 +227,14 @@ export function AutoDemo() {
   const openPitch = () => { setSlide(0); setPhase("pitch"); };
 
   if (phase === "off") {
+    if (state.examples) return null; // the examples experience owns the screen
     return (
-      <button onClick={openPitch} className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-ink text-paper rounded-full pl-4 pr-5 py-2.5 shadow-xl hover:opacity-90 animate-lane-in">
-        <span className="text-clay">▶</span><span className="text-[13px] font-medium">Watch the pitch + demo</span>
-      </button>
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 animate-lane-in">
+        <button onClick={openPitch} className="flex items-center gap-2 bg-ink text-paper rounded-full pl-4 pr-5 py-2.5 shadow-xl hover:opacity-90">
+          <span className="text-clay">▶</span><span className="text-[13px] font-medium">Watch the pitch + demo</span>
+        </button>
+        <button onClick={() => dispatch({ type: "examples", mode: "gallery" })} className="bg-paper text-ink border border-line rounded-full px-4 py-2.5 shadow-xl hover:bg-soft text-[13px] font-medium">More examples</button>
+      </div>
     );
   }
 
@@ -346,8 +351,9 @@ export function AutoDemo() {
         <div className="flex justify-center mb-6 text-white"><RelayMark size={42} /></div>
         <h2 className="text-white text-3xl md:text-4xl font-light leading-tight tracking-tight mb-4">This is a slice of the real system we run our studio on.</h2>
         <p className="text-white/70 text-[16px] leading-relaxed mb-8">The full system adds real logins for every client, multiple businesses kept fully separate, a calendar that drives billing, a costs board, decisions, and org admin. We kept this demo deliberately specific so it stays clear and didn't go overboard. This is a new way for a team to actually <em className="text-white not-italic font-medium">do</em> the work — not just track it. The folder is the product; the product is yours.</p>
-        <div className="flex gap-3 justify-center">
-          <button onClick={stop} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">Explore it yourself →</button>
+        <div className="flex flex-wrap gap-3 justify-center">
+          <button onClick={() => { stop(); dispatch({ type: "examples", mode: "gallery" }); }} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">See 5 more ways teams use Relay →</button>
+          <button onClick={stop} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Explore it yourself</button>
           <button onClick={openPitch} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Replay from the top</button>
         </div>
         <div className="text-white/40 text-[11px] mt-8">Relay™ · © 2026 · a demo of what's possible — not the production product.</div>

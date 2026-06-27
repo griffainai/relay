@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { SPACES, ENGAGEMENTS, engagementFor } from "@/lib/studio";
+import { activeSpaces, engagementFor } from "@/lib/datasets";
 import { taskToMarkdown } from "@/lib/serialize";
 import type { Task } from "@/lib/types";
 
@@ -15,7 +15,7 @@ function clientTree(slug: string, name: string, tasks: Task[]): Node {
   const kids: Node[] = [
     file("account.md", `# ${name} — account\n- contact: ${eng?.contact ?? "—"}\n- login: client (external tier)\n- access: this workspace only — enforced by RLS\n- plan: ${eng?.tier ?? "—"}`),
     file("_ENGAGEMENT.md", eng ? `# ${name}\n- tier: ${eng.tier}\n- fee: ${eng.feeUpfront ? "$" + eng.feeUpfront : "—"}${eng.mrr ? " + $" + eng.mrr + "/mo" : ""}\n- phase: ${eng.phase}\n- status: ${eng.status}\n- started: ${eng.startedAt}\n- next meeting: ${eng.nextMeeting ?? "—"}` : "# engagement"),
-    file("CONTEXT.md", `# Context — ${name}\n## Voice\n${(SPACES.find((s) => s.slug === slug)?.ctx.voice ?? []).map((v) => "- " + v).join("\n")}\n## Constraints\n${(SPACES.find((s) => s.slug === slug)?.ctx.constraints ?? []).map((v) => "- " + v).join("\n")}`),
+    file("CONTEXT.md", `# Context — ${name}\n## Voice\n${(activeSpaces().find((s) => s.slug === slug)?.ctx.voice ?? []).map((v) => "- " + v).join("\n")}\n## Constraints\n${(activeSpaces().find((s) => s.slug === slug)?.ctx.constraints ?? []).map((v) => "- " + v).join("\n")}`),
     file("GOALS.md", eng ? `# Goals (the ISA)\n## Problem\n${eng.isa.problem}\n## Vision\n${eng.isa.vision}\n## Goal\n${eng.isa.goal}\n## Guardrails\n${eng.isa.constraints.map((c) => "- " + c).join("\n")}` : "# goals"),
     file("PLAN.md", eng ? `# Plan\n- tier: ${eng.tier}\n${eng.scope ? "## Monthly scope\n" + eng.scope.map((s) => `- ${s.label}: ${s.used}/${s.total}`).join("\n") : "- scope: fixed build"}` : "# plan"),
     file("STATE.md", `# State — ${name}\n${reqs.map((t) => `- [${t.status === "complete" ? "x" : " "}] ${t.id} — ${t.title} (${t.status})`).join("\n") || "- (empty)"}`),
@@ -47,9 +47,9 @@ export function FolderView() {
   const { state } = useStore();
   const studio: Node = {
     name: "studio", path: "studio", type: "dir", children: [
-      { name: "STATE.md", path: "studio/STATE.md", type: "file", content: `# Studio board\n${state.tasks.length} tasks across ${SPACES.length} spaces.` },
+      { name: "STATE.md", path: "studio/STATE.md", type: "file", content: `# Studio board\n${state.tasks.length} tasks across ${activeSpaces().length} spaces.` },
       { name: "team/people.md", path: "studio/team/people.md", type: "file", content: "# Team\n- @alex — lead\n- @sam — build\n- @relay — the AI operator" },
-      { name: "clients", path: "studio/clients", type: "dir", children: SPACES.filter((s) => s.kind === "client").map((s) => clientTree(s.slug, s.name, state.tasks)) },
+      { name: "clients", path: "studio/clients", type: "dir", children: activeSpaces().filter((s) => s.kind === "client").map((s) => clientTree(s.slug, s.name, state.tasks)) },
     ],
   };
   const roots = [studio, ICM];

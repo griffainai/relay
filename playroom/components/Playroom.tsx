@@ -17,6 +17,7 @@ import { CommandK } from "./CommandK";
 import { QuickAdd } from "./QuickAdd";
 import { ClientPortal } from "./ClientPortal";
 import { AutoDemo } from "./AutoDemo";
+import { ExampleMode } from "./ExampleMode";
 import { Chatbot } from "./Chatbot";
 import { ReviewModal } from "./ReviewModal";
 import { ReviewsWall } from "./ReviewsWall";
@@ -78,6 +79,7 @@ function Root() {
     <>
       {state.role === "client" ? <ClientPortal /> : <Workspace />}
       <AutoDemo />
+      <ExampleMode />
       <Chatbot />
       <ReviewModal />
       <ReviewsWall />

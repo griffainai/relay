@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { SPACES, OPERATORS } from "@/lib/studio";
+import { OPERATORS } from "@/lib/studio";
+import { activeSpaces } from "@/lib/datasets";
 import { Avatar } from "../Avatar";
 
 type Tier = "executive" | "member" | "external";
@@ -90,7 +91,7 @@ export function AdminView() {
 
           <label className="block text-[12px] text-muted mb-2 font-mono">Grant spaces</label>
           <div className="space-y-2 mb-4">
-            {SPACES.map((s) => (
+            {activeSpaces().map((s) => (
               <label key={s.slug} className="flex items-center gap-2.5 cursor-pointer">
                 <input type="checkbox" checked={granted.includes(s.slug)} onChange={() => toggle(s.slug)} className="accent-[var(--ink)]" />
                 <span className="text-[13.5px] text-ink">{s.name}</span>

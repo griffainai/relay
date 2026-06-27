@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useStore, accessibleSpaces } from "@/lib/store";
-import { spaceBySlug, person } from "@/lib/studio";
+import { person } from "@/lib/studio";
+import { spaceBySlug } from "@/lib/datasets";
 import { Avatar } from "../Avatar";
 import { needsYou, Task } from "@/lib/types";
 

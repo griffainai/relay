@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useReducer } from "react";
-import { SEED_TASKS, SPACES } from "./studio";
+import { DATASETS, setActiveDataset, activeSpaces } from "./datasets";
 import type { Comment, PersonId, Space, Task, TaskStatus } from "./types";
 
 export type View = "board" | "cockpit" | "analytics" | "messages" | "activity" | "brain" | "admin" | "folder";
@@ -11,6 +11,7 @@ export type Role = "exec" | "member" | "client";
 interface State {
   role: Role;
   view: View;
+  dataset: string; // which vertical is loaded ("studio" = main demo)
   activeSpace: string; // slug | "all"
   activeChannel: string; // for messages view
   tasks: Task[];
@@ -26,6 +27,7 @@ interface State {
   wall: boolean; // public reviews wall
   fullSystem: string | null; // which "in the full system" feature explainer is open
   clientTab: string; // client portal tab: overview|work|deliverables|files|goals|meetings|billing
+  examples: string | null; // "gallery" | "vignette" | "explore" | "offer" | null
 }
 
 type Action =
@@ -44,6 +46,8 @@ type Action =
   | { type: "wall"; on: boolean }
   | { type: "fullSystem"; key: string | null }
   | { type: "clientTab"; tab: string }
+  | { type: "dataset"; id: string }
+  | { type: "examples"; mode: string | null }
   | { type: "typing"; who: PersonId | null }
   | { type: "add"; task: Task }
   | { type: "update"; id: string; patch: Partial<Task> }
@@ -53,9 +57,10 @@ type Action =
 const initial: State = {
   role: "exec",
   view: "board",
+  dataset: "studio",
   activeSpace: "all",
   activeChannel: "studio",
-  tasks: SEED_TASKS,
+  tasks: DATASETS.studio.tasks,
   detailTab: "details",
   fileMode: false,
   tour: -1,
@@ -66,6 +71,7 @@ const initial: State = {
   wall: false,
   fullSystem: null,
   clientTab: "overview",
+  examples: null,
 };
 
 function reducer(s: State, a: Action): State {
@@ -108,6 +114,13 @@ function reducer(s: State, a: Action): State {
       return { ...s, fullSystem: a.key };
     case "clientTab":
       return { ...s, clientTab: a.tab };
+    case "examples":
+      return { ...s, examples: a.mode };
+    case "dataset": {
+      setActiveDataset(a.id);
+      const ds = DATASETS[a.id] ?? DATASETS.studio;
+      return { ...s, dataset: a.id, tasks: ds.tasks, role: "exec", activeSpace: "all", view: "board", selected: undefined, clientTab: "overview", detailTab: "details", fileMode: false };
+    }
     case "typing":
       return { ...s, typing: a.who };
     case "add":
@@ -138,13 +151,15 @@ export function useStore() {
 
 /** The access model, as a demo toggle (mirrors the real exec/member/external tiers). */
 export function accessibleSpaceSlugs(role: Role): string[] {
-  if (role === "exec") return SPACES.map((s) => s.slug);
-  if (role === "member") return SPACES.filter((s) => s.kind === "client").map((s) => s.slug);
-  return ["northwind"]; // "client" = Dana, sees only her own space
+  const spaces = activeSpaces();
+  if (role === "exec") return spaces.map((s) => s.slug);
+  if (role === "member") return spaces.filter((s) => s.kind === "client").map((s) => s.slug);
+  const firstClient = spaces.find((s) => s.kind === "client"); // "client" sees only their own space
+  return firstClient ? [firstClient.slug] : [];
 }
 export function accessibleSpaces(role: Role): Space[] {
   const allow = new Set(accessibleSpaceSlugs(role));
-  return SPACES.filter((s) => allow.has(s.slug));
+  return activeSpaces().filter((s) => allow.has(s.slug));
 }
 
 export function visibleTasks(s: State): Task[] {

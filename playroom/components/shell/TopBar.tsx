@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
-import { spaceBySlug, OPERATORS, person } from "@/lib/studio";
+import { OPERATORS, person } from "@/lib/studio";
+import { spaceBySlug } from "@/lib/datasets";
 import { Avatar } from "../Avatar";
 import { RoleSwitcher } from "../RoleSwitcher";
 

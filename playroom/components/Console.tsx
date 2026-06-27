@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useStore, accessibleSpaceSlugs } from "@/lib/store";
 import { sortRequest, bakedCompletion } from "@/lib/lane";
-import { spaceBySlug, PRESETS } from "@/lib/studio";
+import { spaceBySlug, activePresets } from "@/lib/datasets";
 import { nextTaskId } from "@/lib/id";
 import type { Task } from "@/lib/types";
 
@@ -61,7 +61,7 @@ export function Console() {
         <button type="submit" disabled={!text.trim()} className="px-3.5 py-2 rounded-md bg-ink text-paper text-[13px] font-medium disabled:opacity-40">File it →</button>
       </form>
       <div className="flex flex-wrap gap-1.5 mt-2">
-        {PRESETS.map((p) => (
+        {activePresets().map((p) => (
           <button key={p.label} onClick={() => file(p.text)} className="text-[11px] px-2 py-0.5 rounded-full border border-line text-ink-2 hover:text-ink hover:border-ink-2/50">{p.label}</button>
         ))}
       </div>

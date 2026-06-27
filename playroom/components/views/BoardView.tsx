@@ -4,7 +4,7 @@ import { Console } from "../Console";
 import { TaskCard } from "../TaskCard";
 import { TaskPanel } from "../TaskPanel";
 import { STATUS_LANES } from "@/lib/board";
-import { spaceBySlug } from "@/lib/studio";
+import { spaceBySlug } from "@/lib/datasets";
 
 export function BoardView() {
   const { state, dispatch } = useStore();
