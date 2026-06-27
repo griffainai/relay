@@ -44,12 +44,6 @@ export function TopBar() {
       <div className="ml-auto flex items-center gap-2">
         <button aria-label="Open command palette" onClick={() => dispatch({ type: "cmdk", on: true })} className="text-[12px] text-muted border border-line rounded-md px-2 py-1 hover:border-ink-2/50 font-mono">⌘K</button>
         <button onClick={() => dispatch({ type: "tour", step: 0 })} className="text-[12px] text-ink-2 border border-line rounded-md px-2.5 py-1 hover:border-ink-2/50">Tour</button>
-        <button
-          onClick={() => { const k = window.prompt("Paste an Anthropic API key to watch Relay write live (stays in your browser):", state.apiKey ?? ""); if (k !== null) dispatch({ type: "key", key: k.trim() || undefined }); }}
-          className={`text-[12px] rounded-md px-2.5 py-1 ${state.apiKey ? "bg-clay/10 text-clay border border-clay/40" : "bg-ink text-paper hover:opacity-90"}`}
-        >
-          {state.apiKey ? "● Live" : "Connect key →"}
-        </button>
       </div>
     </div>
   );

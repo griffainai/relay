@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import { sortRequest, bakedCompletion } from "@/lib/lane";
 import { spaceBySlug, SEED_TASKS } from "@/lib/studio";
-import { nextTaskId } from "@/lib/id";
 import { RelayMark } from "./RelayMark";
 
 type Phase = "off" | "hook" | "play" | "educate" | "terminal" | "finale";
@@ -12,68 +11,67 @@ interface Rect { top: number; left: number; width: number; height: number }
 
 interface Beat {
   chapter: string;
-  title: string; // big header
-  text: string; // subtitle
+  title: string;
+  text: string;
   selector?: string;
-  action?: (d: Dispatch, h: { complete: (id: string) => void }) => void;
+  action?: (d: Dispatch, h: { done: (id: string) => void }) => void;
   dur?: number;
 }
 
 const BEATS: Beat[] = [
   { chapter: "Clients are folders", title: "Every client is a folder.", dur: 6000, selector: '[data-demo="rail"]',
-    text: "Northwind and Acme each have their own folder. All of a client's work lives there — that's the whole idea.",
-    action: (d) => { d({ type: "role", role: "exec" }); d({ type: "space", slug: "all" }); d({ type: "view", view: "board" }); d({ type: "select", id: undefined }); } },
-  { chapter: "The client asks", title: "A client sends a request.", dur: 6000, selector: '[data-demo="client-input"]',
-    text: "No login, no project tool. The client just asks — in plain language — right here.",
-    action: (d) => d({ type: "role", role: "client" }) },
-  { chapter: "The client asks", title: "It lands in their folder.", dur: 6000, selector: '[data-demo="client-input"]',
-    text: "Their request becomes a file inside that client's folder. Asking and watching the status is all a client can do.",
-    action: (d) => d({ type: "add", task: { id: nextTaskId(), spaceSlug: "northwind", title: "Add a 'financing available' note to the pricing page", description: "add a short 'financing available' note on the pricing page", priority: "p2", status: "outstanding", assignee: null, labels: ["copy"], checklist: [], origin: "client", filedBy: "client (Dana)", comments: [] } }) },
-  { chapter: "Claude runs the folder", title: "Point Claude at the folder.", dur: 6800, selector: '[data-demo="run-tasks"]',
-    text: "Because each client is a folder, Claude knows exactly what to do for that client — it reads the folder's rules. Nothing to configure.",
-    action: (d) => { d({ type: "role", role: "exec" }); d({ type: "view", view: "board" }); d({ type: "space", slug: "all" }); d({ type: "select", id: undefined }); } },
-  { chapter: "Claude runs the folder", title: "It completes the routine work.", dur: 6800, selector: '[data-demo="board"]',
-    text: "It reads the rules, does each task, writes a completion note, and moves it to Done — exactly like a teammate would.",
-    action: (_d, h) => { h.complete("t-105"); setTimeout(() => h.complete("t-203"), 1100); } },
-  { chapter: "The guardrail", title: "It refuses what it shouldn't touch.", dur: 6800, selector: '[data-demo="panel"]',
-    text: "Publishing a page and changing pricing are off-limits — so it escalates to a human instead, with a recommendation.",
-    action: (d) => { d({ type: "space", slug: "northwind" }); d({ type: "select", id: "t-104" }); d({ type: "detailTab", tab: "details" }); } },
-  { chapter: "You + your team", title: "You and your partner, on one board.", dur: 6200, selector: '[data-demo="panel"]',
-    text: "Relay flagged Alex; Alex pulled in Sam. Two people and an AI, all working the same task.",
+    text: "Northwind and Acme each have their own folder — all of their work, files, voice, and rules live inside it.",
+    action: (d) => { d({ type: "role", role: "exec" }); d({ type: "space", slug: "all" }); d({ type: "view", view: "board" }); d({ type: "select", id: undefined }); d({ type: "update", id: "t-102", patch: { status: "outstanding", completionNote: undefined, completedBy: undefined, completedAt: undefined, deliverable: undefined, assignee: "jay", assignedBy: "shaq" } }); } },
+  { chapter: "A teammate hands you work", title: "Your co-founder sends you a task.", dur: 6200, selector: '[data-demo="board"]',
+    text: "Sam needs a website edit for Northwind, so he files it to you. It lands right on your board.",
+    action: (d) => { d({ type: "space", slug: "all" }); d({ type: "select", id: undefined }); } },
+  { chapter: "You do it", title: "Open the task.", dur: 6000, selector: '[data-demo="panel"]',
+    text: "You click it. Everything about it — the client's voice, the rules, the guardrails — comes from that client's folder.",
+    action: (d) => { d({ type: "space", slug: "northwind" }); d({ type: "select", id: "t-102" }); d({ type: "detailTab", tab: "details" }); } },
+  { chapter: "You do it", title: "Copy the prompt.", dur: 6400, selector: '[data-demo="panel"]',
+    text: "Relay assembles the exact instructions from the folder — the request, the client's voice, the do-not-cross lines. One click to copy." },
+  { chapter: "You do it", title: "Run it in Claude.", dur: 6600, selector: '[data-demo="panel"]',
+    text: "Paste it into Claude. Because the client's folder holds the actual website files, Claude makes the real edit — not a suggestion." },
+  { chapter: "You do it", title: "Paste the note. Done.", dur: 6400, selector: '[data-demo="panel"]',
+    text: "Drop Claude's result back on the task and mark it complete — it moves to Done. That's the whole loop, by hand.",
+    action: (_d, h) => h.done("t-102") },
+  { chapter: "The guardrail", title: "Some things you escalate — never auto-do.", dur: 6400, selector: '[data-demo="panel"]',
+    text: "Publishing a page or changing pricing is off-limits. Relay flags those for a human, with a recommendation. It never crosses that line.",
+    action: (d) => { d({ type: "select", id: "t-104" }); d({ type: "detailTab", tab: "details" }); } },
+  { chapter: "You + your team", title: "You and your partner, on one board.", dur: 6000, selector: '[data-demo="panel"]',
+    text: "Relay flagged Alex; Alex pulled in Sam. The whole handoff lives on the task — two people and the AI, in one place.",
     action: (d) => d({ type: "detailTab", tab: "conversation" }) },
-  { chapter: "You own it", title: "It's all just files you own.", dur: 6800, selector: '[data-demo="panel"]',
-    text: "Every card is a markdown file you and the AI both edit. The board IS the folder — nothing is locked inside an app.",
+  { chapter: "You own it", title: "It's all just files you own.", dur: 6200, selector: '[data-demo="panel"]',
+    text: "Every card is a markdown file. The board IS the folder — nothing is trapped inside an app.",
     action: (d) => { d({ type: "select", id: "t-101" }); d({ type: "fileMode", on: true }); } },
-  { chapter: "Who sees what", title: "Different people, different views.", dur: 6500, selector: '[data-demo="role"]',
-    text: "An Executive sees everything; a client sees only their own requests. Real, enforced access. Now — here's what's underneath.",
+  { chapter: "Who sees what", title: "Different people, different views.", dur: 6200, selector: '[data-demo="role"]',
+    text: "Executive sees everything; a client sees only their own requests. Real, enforced access. Now — the fully autonomous way.",
     action: (d) => { d({ type: "fileMode", on: false }); d({ type: "select", id: undefined }); d({ type: "role", role: "exec" }); } },
 ];
 
 const TERM: { t: string; k: string }[] = [
-  { t: "you ▸ here's the Northwind folder. complete the outstanding tasks.", k: "user" },
+  { t: "you ▸ here's the whole Northwind folder. run all the outstanding tasks.", k: "user" },
   { t: "", k: "gap" },
   { t: "Reading the folder…", k: "dim" },
   { t: "  CLAUDE.md → identity.md → rules.md → reference/playbook.md", k: "dim" },
-  { t: "  clients/northwind/CONTEXT.md → voice: warm, local · no new claims", k: "dim" },
-  { t: "Found 3 outstanding requests in clients/northwind/requests/.", k: "dim" },
+  { t: "  clients/northwind/ → site/ (the live website files) · CONTEXT.md (voice) · requests/ (3 open)", k: "dim" },
+  { t: "The folder has everything I need — the site, the rules, the voice. Running all 3.", k: "dim" },
   { t: "", k: "gap" },
   { t: "req-1 · “update the homepage headline to same-day quotes”", k: "head" },
-  { t: "  sort → 🟢 CLEAR (copy edit · reversible · in playbook)", k: "clear" },
-  { t: "  drafting 3 options in Northwind's voice…", k: "dim" },
-  { t: "  ✓ wrote deliverables/hero-headline.md", k: "file" },
-  { t: "  ✓ completion note: “3 options, #1 recommended. Original preserved.”", k: "note" },
-  { t: "  → moved to Completed", k: "done" },
+  { t: "  🟢 CLEAR · editing site/index.html → <h1>…</h1>", k: "clear" },
+  { t: "  ✓ changed the headline in the site files (3 options, #1 applied)", k: "file" },
+  { t: "  ✓ note: “Headline updated in voice. Original preserved.” → Completed", k: "done" },
   { t: "", k: "gap" },
   { t: "req-2 · “fix the typo on the About page”", k: "head" },
-  { t: "  sort → 🟢 CLEAR · ✓ wrote deliverables/about-typo.md · note added · → Completed", k: "done" },
+  { t: "  🟢 CLEAR · editing site/about.html → “photograhy” → “photography”", k: "clear" },
+  { t: "  ✓ fixed in the site files · note added · → Completed", k: "done" },
   { t: "", k: "gap" },
   { t: "req-3 · “push the new pricing page live today”", k: "head" },
-  { t: "  sort → 🔴 ESCALATE — production + money (hard triggers)", k: "esc" },
-  { t: "  won't publish or touch pricing. Wrote an escalation note + recommendation,", k: "dim" },
-  { t: "  assigned @alex. Left in place — not completed.", k: "dim" },
+  { t: "  🔴 ESCALATE — production + money. I won't publish or touch pricing.", k: "esc" },
+  { t: "  Wrote an escalation note + recommendation, assigned @alex. Left untouched.", k: "dim" },
   { t: "", k: "gap" },
-  { t: "Done. 2 completed, 1 escalated. Updated clients/northwind/STATE.md.", k: "summary" },
-  { t: "The folder now matches reality — a human only has to make one call.", k: "summary" },
+  { t: "Done. 2 edits made in the site files, 1 escalated. Updated STATE.md.", k: "summary" },
+  { t: "Because the whole folder was here, I didn't ask a single question — I just did the work.", k: "summary" },
 ];
 
 export function AutoDemo() {
@@ -92,20 +90,18 @@ export function AutoDemo() {
   }, []);
   const markSeen = () => { try { sessionStorage.setItem("relay-demo-seen", "1"); } catch {} };
 
-  const complete = (id: string) => {
+  // simulate "you pasted Claude's completion note back" — a manual, human-marked completion
+  const done = (id: string) => {
     const seed = SEED_TASKS.find((t) => t.id === id);
     const space = seed && spaceBySlug(seed.spaceSlug);
-    if (!seed || !space) return;
-    const sort = sortRequest(seed.description);
-    const r = bakedCompletion(seed.description, sort, space);
-    dispatch({ type: "update", id, patch: { status: "complete", completedBy: "relay", completedAt: "just now", deliverable: r.deliverable, completionNote: r.completionNote, reason: sort.reason } });
+    const r = seed && space ? bakedCompletion(seed.description, sortRequest(seed.description), space) : {};
+    dispatch({ type: "update", id, patch: { status: "complete", completedBy: "jay", completedAt: "just now", deliverable: (r as any).deliverable, completionNote: "Ran it in Claude → pasted the note. Headline updated (3 options, #1). Reversible." } });
   };
 
-  // run beat action + measure spotlight target
   useEffect(() => {
     if (phase !== "play") return;
     const b = BEATS[beat];
-    b.action?.(dispatch, { complete });
+    b.action?.(dispatch, { done });
     let cancelled = false;
     const measure = () => {
       if (cancelled || !b.selector) { setRect(null); return; }
@@ -137,7 +133,7 @@ export function AutoDemo() {
     if (phase !== "terminal") { setTerm(0); return; }
     if (term >= TERM.length) { const t = setTimeout(() => setPhase("finale"), 2600); return () => clearTimeout(t); }
     const cur = TERM[term];
-    const t = setTimeout(() => setTerm((n) => n + 1), cur.k === "gap" ? 240 : cur.k === "user" ? 1200 : 560);
+    const t = setTimeout(() => setTerm((n) => n + 1), cur.k === "gap" ? 240 : cur.k === "user" ? 1300 : 600);
     return () => clearTimeout(t);
   }, [phase, term]);
 
@@ -158,7 +154,7 @@ export function AutoDemo() {
         <div className="max-w-2xl text-center">
           <div className="flex justify-center mb-6 text-white"><RelayMark size={46} /></div>
           <h1 className="text-white text-4xl md:text-5xl font-light leading-[1.1] tracking-tight mb-4">You're about to watch a studio <span className="text-clay">run itself.</span></h1>
-          <p className="text-white/70 text-lg mb-8">A slow, guided walkthrough — big captions, one step at a time. The cool part isn't the app; it's what's underneath.</p>
+          <p className="text-white/70 text-lg mb-8">A slow, guided walkthrough — big captions, one step at a time. First how a teammate works it by hand, then how Claude runs the whole folder.</p>
           <div className="flex gap-3 justify-center">
             <button onClick={start} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">▶ Start the walkthrough</button>
             <button onClick={stop} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Already seen it — skip →</button>
@@ -178,7 +174,6 @@ export function AutoDemo() {
             style={{ top: rect.top - 6, left: rect.left - 6, width: rect.width + 12, height: rect.height + 12, boxShadow: "0 0 0 9999px rgba(11,11,12,0.6)", border: "2.5px solid var(--clay)" }} />
         ) : <div className="fixed inset-0 z-40 bg-ink/60" />}
 
-        {/* big, consistent caption — the explainer */}
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 w-[660px] max-w-[92vw]">
           <div className="rounded-2xl bg-paper border border-line shadow-2xl px-6 py-5 animate-lane-in" key={beat}>
             <div className="flex items-center gap-2 mb-2">
@@ -191,7 +186,6 @@ export function AutoDemo() {
           </div>
         </div>
 
-        {/* controls */}
         <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-ink/92 text-white rounded-full px-4 py-2 shadow-xl backdrop-blur">
           <button onClick={() => setBeat((x) => Math.max(0, x - 1))} className="text-white/70 hover:text-white text-[13px]" aria-label="Previous">◀ Back</button>
           <button onClick={() => setPaused((p) => !p)} className="text-white text-[12px] px-2" aria-label={paused ? "Play" : "Pause"}>{paused ? "▶ Play" : "❚❚ Pause"}</button>
@@ -206,9 +200,9 @@ export function AutoDemo() {
 
   if (phase === "educate") {
     const cards = [
-      { k: "The turn", t: "Everything you saw is a folder of markdown.", b: "One folder per client. Point Claude at a client's folder and it knows that client's work, rules, and voice — no database, no setup. The files are the source of truth." },
+      { k: "The turn", t: "Everything you saw is a folder of markdown.", b: "One folder per client — including the website files. Point Claude at a client's folder and it knows that client's work, rules, and voice. The files are the source of truth." },
       { k: "Three layers", t: "Interpretable Context Methodology", b: "**Map** (CLAUDE.md) routes the agent · **Rooms** (CONTEXT.md) load per stage · **Skills** load only when a task needs one. The folder behaves like a deep specialist without loading everything." },
-      { k: "The engine", t: "rules.md literally runs this.", b: "The Lane Protocol — clear / hold / escalate — is the same logic whether a human or Claude works the folder. The methodology isn't documentation *about* the product. It **is** the product." },
+      { k: "The engine", t: "rules.md literally runs this.", b: "The Lane Protocol — clear / hold / escalate — is the same logic whether a human works a task by hand or Claude runs the whole folder. The methodology isn't documentation *about* the product. It **is** the product." },
     ];
     const c = cards[edu];
     return (
@@ -219,7 +213,7 @@ export function AutoDemo() {
           <p className="text-ink-2 text-[15px] leading-relaxed mb-6" dangerouslySetInnerHTML={{ __html: c.b.replace(/\*\*(.+?)\*\*/g, '<strong class="text-ink">$1</strong>') }} />
           <div className="flex items-center gap-2">
             <div className="flex gap-1">{cards.map((_, i) => <span key={i} className="h-1 rounded-full" style={{ width: i === edu ? 18 : 6, background: i === edu ? "var(--clay)" : "var(--line)" }} />)}</div>
-            <button onClick={() => (edu >= 2 ? setPhase("terminal") : setEdu(edu + 1))} className="ml-auto bg-ink text-paper px-4 py-2 rounded-md text-[13px]">{edu >= 2 ? "Now run it in Claude →" : "Next →"}</button>
+            <button onClick={() => (edu >= 2 ? setPhase("terminal") : setEdu(edu + 1))} className="ml-auto bg-ink text-paper px-4 py-2 rounded-md text-[13px]">{edu >= 2 ? "Now the autonomous way →" : "Next →"}</button>
           </div>
         </div>
       </Overlay>
@@ -227,15 +221,15 @@ export function AutoDemo() {
   }
 
   if (phase === "terminal") {
-    const color = (k: string) => k === "user" ? "text-white" : k === "clear" ? "text-[#4ADE80]" : k === "esc" ? "text-[#FBBF24]" : k === "file" || k === "done" ? "text-[#7CC4FF]" : k === "note" ? "text-[#C9A8FF]" : k === "head" ? "text-white font-medium" : k === "summary" ? "text-white" : "text-[#8E8E93]";
+    const color = (k: string) => k === "user" ? "text-white" : k === "clear" ? "text-[#4ADE80]" : k === "esc" ? "text-[#FBBF24]" : k === "file" || k === "done" ? "text-[#7CC4FF]" : k === "head" ? "text-white font-medium" : k === "summary" ? "text-white" : "text-[#8E8E93]";
     return (
       <Overlay>
         <div className="max-w-2xl w-full">
-          <div className="eyebrow text-clay mb-2">No app required</div>
-          <h2 className="text-2xl font-light tracking-tight text-ink mb-1">Every client is a folder. Drop it into Claude.</h2>
-          <p className="text-ink-2 text-[13.5px] mb-4">Point Claude at the client's folder and ask it to clear the queue. It reads the rules and does exactly what that client needs — here's the real session, step by step.</p>
+          <div className="eyebrow text-clay mb-2">The autonomous way · no app, no clicking</div>
+          <h2 className="text-2xl font-light tracking-tight text-ink mb-1">Drop the whole client folder in the cloud.</h2>
+          <p className="text-ink-2 text-[13.5px] mb-4">Earlier you did one task by hand. Here, you hand Claude the entire folder — website files and all — and tell it to run everything. It has all it needs, so it just does the work, step by step.</p>
           <div className="rounded-xl bg-[#0B0B0C] border border-[#26262A] p-4 font-mono text-[12px] leading-relaxed h-[340px] overflow-hidden">
-            <div className="text-[#8E8E93] mb-2 pb-2 border-b border-[#26262A]">Claude · clients/northwind/ folder uploaded</div>
+            <div className="text-[#8E8E93] mb-2 pb-2 border-b border-[#26262A]">Claude · clients/northwind/ folder uploaded (site files + rules)</div>
             {TERM.slice(0, term).map((l, i) => l.k === "gap" ? <div key={i} className="h-2" /> : <div key={i} className={`animate-lane-in ${color(l.k)}`}>{l.t}</div>)}
             {term < TERM.length && <span className="inline-block w-2 h-3.5 bg-clay animate-blink align-middle" />}
           </div>

@@ -5,8 +5,6 @@ import { Avatar } from "./Avatar";
 import { TaskChip } from "./StatusChip";
 import { Markdown } from "./Markdown";
 import { taskToMarkdown } from "@/lib/serialize";
-import { sortRequest, bakedCompletion } from "@/lib/lane";
-import { liveComplete } from "@/lib/complete";
 import { spaceBySlug, person, LABELS } from "@/lib/studio";
 import { PRIORITY_PILL } from "@/lib/board";
 import type { DetailTab } from "@/lib/store";
@@ -34,7 +32,6 @@ export function TaskPanel({ t }: { t: Task }) {
   const [note, setNote] = useState("");
   const [draft, setDraft] = useState("");
   const [copied, setCopied] = useState(false);
-  const [busy, setBusy] = useState(false);
 
   const tab = state.detailTab;
   const setTab = (x: DetailTab) => dispatch({ type: "detailTab", tab: x });
@@ -75,28 +72,6 @@ export function TaskPanel({ t }: { t: Task }) {
     dispatch({ type: "update", id: t.id, patch: { spaceSlug: "executive" } });
     dispatch({ type: "comment", id: t.id, comment: { id: `c-${Date.now()}`, author: VIEWER, body: "Routed to Executive for a call.", at: "now" } });
   };
-  const runAuto = async () => {
-    setBusy(true);
-    const sort = sortRequest(t.description);
-    if (t.spaceSlug === "executive")
-      Object.assign(sort, { outcome: "needs-you", reason: "executive decision — Relay escalates, never decides", trigger: "executive" });
-    let patch: Partial<Task> = { reason: sort.reason, playbook: sort.playbook };
-    if (state.apiKey && space) {
-      try {
-        const live = await liveComplete({ apiKey: state.apiKey, raw: t.description, sort, space });
-        if (sort.outcome === "clear") patch = { ...patch, status: "complete", completedBy: "relay", completedAt: "just now", deliverable: { title: "Deliverable", body: live.body }, completionNote: "Completed live by Relay." };
-        else if (sort.outcome === "needs-you") patch = { ...patch, escalation: live.body };
-        else patch = { ...patch, status: "waiting-on", holdQuestion: live.body };
-      } catch {
-        patch = { ...patch, ...applyBaked(t, sort, space) };
-      }
-    } else if (space) {
-      patch = { ...patch, ...applyBaked(t, sort, space) };
-    }
-    dispatch({ type: "update", id: t.id, patch });
-    setBusy(false);
-  };
-
   return (
     <div data-demo="panel" className="w-[420px] shrink-0 border-l border-line bg-paper flex flex-col h-full">
       {/* header */}
@@ -197,13 +172,13 @@ export function TaskPanel({ t }: { t: Task }) {
                   </div>
                 )}
 
-                {/* AI actions */}
+                {/* Run it with Claude — the honest manual flow */}
                 <div className="rounded-md border border-clay/30 bg-clay/[0.03] p-3">
-                  <div className="eyebrow text-clay mb-2">Relay · AI actions</div>
+                  <div className="eyebrow text-clay mb-1.5">Run it with Claude</div>
+                  <p className="text-[11.5px] text-muted mb-2">Copy the prompt → paste it into Claude → it does the work → paste the completion note above. (Or upload the whole client folder to the cloud to run them all.)</p>
                   <div className="flex flex-wrap gap-1.5">
-                    <ActBtn onClick={runAuto} disabled={busy}>{busy ? "Working…" : "Work autonomously"}</ActBtn>
+                    <button onClick={copyPrompt} className="text-[11.5px] font-medium bg-clay text-white rounded-md px-2.5 py-1 hover:opacity-90">{copied ? "Copied ✓" : "Copy prompt"}</button>
                     <ActBtn onClick={genPrompt}>Generate prompt</ActBtn>
-                    <ActBtn onClick={copyPrompt}>{copied ? "Copied ✓" : "Copy prompt"}</ActBtn>
                     {t.spaceSlug !== "executive" && <ActBtn onClick={routeExec}>Route to Executive ↑</ActBtn>}
                   </div>
                   {t.agentPrompt && <pre className="mt-2 text-[11px] font-mono text-ink-2 whitespace-pre-wrap leading-relaxed bg-soft/60 rounded p-2 max-h-32 overflow-y-auto">{t.agentPrompt}</pre>}
@@ -264,13 +239,6 @@ export function TaskPanel({ t }: { t: Task }) {
       )}
     </div>
   );
-}
-
-function applyBaked(t: Task, sort: ReturnType<typeof sortRequest>, space: NonNullable<ReturnType<typeof spaceBySlug>>): Partial<Task> {
-  const r = bakedCompletion(t.description, sort, space);
-  if (sort.outcome === "clear") return { status: "complete", completedBy: "relay", completedAt: "just now", deliverable: r.deliverable, completionNote: r.completionNote };
-  if (sort.outcome === "needs-you") return { escalation: r.escalation };
-  return { status: "waiting-on", holdQuestion: r.holdQuestion };
 }
 
 function MiniTab({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
