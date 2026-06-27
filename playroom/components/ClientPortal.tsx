@@ -8,12 +8,12 @@ import { TaskCard } from "./TaskCard";
 import { Avatar } from "./Avatar";
 import { Markdown } from "./Markdown";
 import { person } from "@/lib/studio";
-import { engagementFor, spaceBySlug } from "@/lib/datasets";
+import { engagementFor, spaceBySlug, activeSpaces } from "@/lib/datasets";
 import { nextTaskId, nextCommentId } from "@/lib/id";
 import { PHASES } from "@/lib/types";
 import type { EngFile, EngMeeting, Task } from "@/lib/types";
 
-const CLIENT_SLUG = "northwind";
+const DEFAULT_CLIENT = "northwind";
 const TABS = ["overview", "board", "deliverables", "files", "goals", "meetings", "billing"] as const;
 
 // the client's 3 simple lanes (scoped, friendly)
@@ -25,8 +25,10 @@ const LANES: { key: string; label: string; has: (t: Task) => boolean }[] = [
 
 export function ClientPortal() {
   const { state, dispatch } = useStore();
-  const space = spaceBySlug(CLIENT_SLUG)!;
-  const eng = engagementFor(CLIENT_SLUG)!;
+  const activeSp = spaceBySlug(state.activeSpace);
+  const clientSlug = activeSp && activeSp.kind === "client" ? state.activeSpace : (activeSpaces().find((s) => s.kind === "client")?.slug ?? DEFAULT_CLIENT);
+  const space = spaceBySlug(clientSlug)!;
+  const eng = engagementFor(clientSlug)!;
   const tab = state.clientTab;
   const setTab = (t: string) => { dispatch({ type: "clientTab", tab: t }); dispatch({ type: "select", id: undefined }); };
 
@@ -34,12 +36,12 @@ export function ClientPortal() {
   const [acks, setAcks] = useState<Record<string, string>>(() => Object.fromEntries(eng.deliverables.map((d) => [d.id, d.ack])));
   const [meetings, setMeetings] = useState<EngMeeting[]>(eng.meetings);
   const [files, setFiles] = useState<EngFile[]>(eng.files);
-  const mine = state.tasks.filter((t) => t.spaceSlug === CLIENT_SLUG && t.origin === "client");
-  const selected = state.tasks.find((t) => t.id === state.selected && t.spaceSlug === CLIENT_SLUG);
+  const mine = state.tasks.filter((t) => t.spaceSlug === clientSlug && t.origin === "client");
+  const selected = state.tasks.find((t) => t.id === state.selected && t.spaceSlug === clientSlug);
 
   const submit = () => {
     if (!reqText.trim()) return;
-    const task: Task = { id: nextTaskId(), spaceSlug: CLIENT_SLUG, title: reqText.trim().slice(0, 60), description: reqText.trim(), priority: "p2", status: "outstanding", assignee: null, labels: [], checklist: [], origin: "client", filedBy: "client (Dana)", comments: [] };
+    const task: Task = { id: nextTaskId(), spaceSlug: clientSlug, title: reqText.trim().slice(0, 60), description: reqText.trim(), priority: "p2", status: "outstanding", assignee: null, labels: [], checklist: [], origin: "client", filedBy: state.dataset === "studio" ? "client (Dana)" : "client", comments: [] };
     dispatch({ type: "add", task });
     dispatch({ type: "select", id: task.id });
     setReqText("");
