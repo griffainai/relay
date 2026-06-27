@@ -10,7 +10,10 @@ const WORK: Nav[] = [
   { view: "messages", label: "Messages", hint: "channels & DMs" },
   { view: "activity", label: "Activity", hint: "what we all did" },
 ];
-const SYSTEM: Nav[] = [{ view: "brain", label: "The Brain", hint: "how it thinks" }];
+const SYSTEM: Nav[] = [
+  { view: "folder", label: "The Folder", hint: "it's all files" },
+  { view: "brain", label: "The Brain", hint: "how it thinks" },
+];
 const LOCKED: { label: string; key: string }[] = [
   { label: "Login & accounts", key: "login" },
   { label: "Multiple businesses", key: "businesses" },

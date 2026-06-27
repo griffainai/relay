@@ -85,6 +85,10 @@ export function TaskPanel({ t }: { t: Task }) {
         <button aria-label="Close panel" onClick={() => dispatch({ type: "select", id: undefined })} className="text-muted hover:text-ink text-[16px] px-1">×</button>
       </div>
 
+      <div className="px-4 py-1.5 border-b border-line bg-soft/40 font-mono text-[11px] text-muted flex items-center gap-1.5 shrink-0" title="This task is a file. Everything here is.">
+        <span>📄</span>{t.spaceSlug === "executive" ? "executive" : `clients/${t.spaceSlug}`}/requests/{t.id}.md
+      </div>
+
       {state.fileMode ? (
         <div className="flex-1 overflow-y-auto p-4">
           <pre className="text-[12px] font-mono text-ink-2 whitespace-pre-wrap leading-relaxed">{taskToMarkdown(t)}</pre>

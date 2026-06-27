@@ -4,7 +4,7 @@ import React, { createContext, useContext, useReducer } from "react";
 import { SEED_TASKS, SPACES } from "./studio";
 import type { Comment, PersonId, Space, Task, TaskStatus } from "./types";
 
-export type View = "board" | "cockpit" | "analytics" | "messages" | "activity" | "brain" | "admin";
+export type View = "board" | "cockpit" | "analytics" | "messages" | "activity" | "brain" | "admin" | "folder";
 export type DetailTab = "details" | "conversation" | "files" | "activity";
 export type Role = "exec" | "member" | "client";
 
