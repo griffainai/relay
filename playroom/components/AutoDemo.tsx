@@ -355,6 +355,7 @@ export function AutoDemo() {
         <p className="text-white/70 text-[16px] leading-relaxed mb-8">The full system adds real logins for every client, multiple businesses kept fully separate, a calendar that drives billing, a costs board, decisions, and org admin. We kept this demo deliberately specific so it stays clear and didn't go overboard. This is a new way for a team to actually <em className="text-white not-italic font-medium">do</em> the work — not just track it. The folder is the product; the product is yours.</p>
         <div className="flex flex-wrap gap-3 justify-center">
           <button onClick={() => { stop(); dispatch({ type: "examples", mode: "gallery" }); }} className="bg-clay text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:opacity-90">See 5 more ways teams use Relay →</button>
+          <button onClick={() => { markSeen(); dispatch({ type: "beta", on: true }); }} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Join the private beta</button>
           <button onClick={stop} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Explore it yourself</button>
           <button onClick={openPitch} className="text-white/70 px-5 py-3 rounded-lg text-[15px] hover:text-white border border-white/20">Replay from the top</button>
         </div>

@@ -22,6 +22,7 @@ import { Chatbot } from "./Chatbot";
 import { ReviewModal } from "./ReviewModal";
 import { ReviewsWall } from "./ReviewsWall";
 import { FullSystemModal } from "./FullSystemModal";
+import { BetaModal } from "./BetaModal";
 
 function Workspace() {
   const { state, dispatch } = useStore();
@@ -84,6 +85,7 @@ function Root() {
       <ReviewModal />
       <ReviewsWall />
       <FullSystemModal />
+      <BetaModal />
     </>
   );
 }

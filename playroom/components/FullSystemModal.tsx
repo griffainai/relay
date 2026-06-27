@@ -53,11 +53,13 @@ export function FullSystemModal() {
           <div className="eyebrow text-clay mb-1">In our real system</div>
           <p className="text-[12.5px] text-ink-2 leading-relaxed">{f.backend}</p>
         </div>
-        <div className="rounded-md bg-soft border border-line px-3 py-2.5 text-[12px] text-muted">
-          We kept this demo deliberately specific so it stays clear and didn't go overboard — all of this lives in the full command center, not the demo.
+        <div className="rounded-md bg-clay/[0.07] border border-clay/30 px-3 py-2.5">
+          <div className="eyebrow text-clay mb-1">This is in the Relay app</div>
+          <p className="text-[12.5px] text-ink-2 leading-relaxed">The demo is deliberately specific. This — and everything else in the 🔒 section — is the productized app: your own folder, your own API key, free during the private beta.</p>
         </div>
-        <div className="flex justify-end mt-4">
-          <button onClick={close} className="text-[13px] bg-ink text-paper px-4 py-2 rounded-md">Got it</button>
+        <div className="flex justify-end gap-2 mt-4">
+          <button onClick={close} className="text-[13px] text-ink-2 px-3 py-2 rounded-md hover:bg-soft">Got it</button>
+          <button onClick={() => { close(); dispatch({ type: "beta", on: true }); }} className="text-[13px] bg-clay text-white px-4 py-2 rounded-md font-medium">Join the beta →</button>
         </div>
       </div>
     </div>

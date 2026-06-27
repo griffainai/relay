@@ -5,6 +5,23 @@ export const SCHOOL = {
   course: "Interpretable Context Methodology",
 };
 
+// The beta firewall — capture interest + willingness-to-pay. No backend.
+export const BETA = {
+  // TODO(owner): paste a Formspree/Tally form URL to collect signups in your inbox.
+  // Empty = stored locally in the visitor's browser only (same as the reviews wall).
+  endpoint: "",
+  headline: "Run Relay on your own folder.",
+  sub: "Free during the beta. We onboard a few teams at a time.",
+  body: "Point it at your own work: we scaffold the folder from a starter you can edit, you connect your own Claude API key, and you get the whole system — the multiple-businesses, calendar→billing, costs, decisions, and admin you saw locked. It runs on your key, so the work and the data stay yours.",
+  donate: "Free to join. If it earns its keep, an optional monthly donation keeps it running — you only ever pay Anthropic for what Claude does.",
+  tiers: [
+    { id: "explore", label: "Just exploring" },
+    { id: "d5", label: "I'd donate ~$5/mo" },
+    { id: "d10", label: "I'd donate ~$10/mo" },
+    { id: "more", label: "I'd pay more than that" },
+  ],
+};
+
 // "The structure is free. The substance is the folder you build."
 export const CRAFT = {
   eyebrow: "The part that's actually on you",

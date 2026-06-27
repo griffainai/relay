@@ -28,6 +28,7 @@ interface State {
   fullSystem: string | null; // which "in the full system" feature explainer is open
   clientTab: string; // client portal tab: overview|work|deliverables|files|goals|meetings|billing
   examples: string | null; // "gallery" | "vignette" | "explore" | "offer" | null
+  beta: boolean; // the beta early-access gate
 }
 
 type Action =
@@ -48,6 +49,7 @@ type Action =
   | { type: "clientTab"; tab: string }
   | { type: "dataset"; id: string }
   | { type: "examples"; mode: string | null }
+  | { type: "beta"; on: boolean }
   | { type: "typing"; who: PersonId | null }
   | { type: "add"; task: Task }
   | { type: "update"; id: string; patch: Partial<Task> }
@@ -72,6 +74,7 @@ const initial: State = {
   fullSystem: null,
   clientTab: "overview",
   examples: null,
+  beta: false,
 };
 
 function reducer(s: State, a: Action): State {
@@ -116,6 +119,8 @@ function reducer(s: State, a: Action): State {
       return { ...s, clientTab: a.tab };
     case "examples":
       return { ...s, examples: a.mode };
+    case "beta":
+      return { ...s, beta: a.on };
     case "dataset": {
       setActiveDataset(a.id);
       const ds = DATASETS[a.id] ?? DATASETS.studio;
