@@ -54,7 +54,7 @@ export function Sidebar() {
             <div className="eyebrow text-muted px-2.5 mb-1.5">System</div>
             <div className="space-y-0.5 mb-4">{SYSTEM.map((v) => <Item key={v.view} v={v} />)}</div>
             <div className="eyebrow text-muted px-2.5 mb-1.5">In the full system</div>
-            <div className="space-y-0.5">
+            <div data-demo="locked" className="space-y-0.5">
               {LOCKED.map((l) => (
                 <button key={l.key} onClick={() => dispatch({ type: "fullSystem", key: l.key })} className="w-full px-2.5 py-1.5 rounded-md flex items-center justify-between opacity-60 hover:opacity-100 hover:bg-soft/60 transition" title={`${l.label} — see what it does in the full system`}>
                   <span className="text-[13.5px] text-muted">{l.label}</span><span className="text-[10px] text-muted">🔒</span>

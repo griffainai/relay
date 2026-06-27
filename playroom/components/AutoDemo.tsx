@@ -53,12 +53,42 @@ const BEATS: Beat[] = [
   { chapter: "You + your team", title: "You and your partner, on one board.", dur: 6000, selector: '[data-demo="panel"]',
     text: "Relay flagged Alex; Alex pulled in Sam. The whole handoff lives on the task — two people and the AI, in one place.",
     action: (d) => d({ type: "detailTab", tab: "conversation" }) },
+  // ── talk to each other (everyone has a login) ──
+  { chapter: "Talk to each other", title: "Everyone has a login — so you message each other.", dur: 6400, selector: '[data-demo="main"]',
+    text: "Because every operator and client has their own account, the studio chats right here — channels and DMs, like Discord. It's all one place: the work and the talk.",
+    action: (d) => { d({ type: "select", id: undefined }); d({ type: "view", view: "messages" }); d({ type: "channel", id: "studio" }); } },
+  { chapter: "Talk to each other", title: "There's even a live lounge.", dur: 6000, selector: '[data-demo="main"]',
+    text: "Everyone exploring the demo right now drops into the lounge and can chat. Real accounts are what make all of this multiplayer.",
+    action: (d) => d({ type: "channel", id: "lounge" }) },
+
+  // ── the rest of the workspace (explained) ──
+  { chapter: "The cockpit", title: "What needs you — across every client.", dur: 6000, selector: '[data-demo="main"]',
+    text: "The cockpit cuts through it all: the single most important thing to do next, plus what's escalated and on hold — across every space.",
+    action: (d) => d({ type: "view", view: "cockpit" }) },
+  { chapter: "Analytics", title: "The numbers, and who's closing the work.", dur: 6000, selector: '[data-demo="main"]',
+    text: "Throughput, completion rate, tasks by space — and a breakdown of who's closing work, including how much Relay clears on its own.",
+    action: (d) => d({ type: "view", view: "analytics" }) },
+  { chapter: "Activity", title: "Every move — fully audited.", dur: 5800, selector: '[data-demo="main"]',
+    text: "A complete trail of what you, your partner, and the AI each did and when — filterable, searchable. The trail is the trust.",
+    action: (d) => d({ type: "view", view: "activity" }) },
+  { chapter: "The Brain", title: "How it actually thinks.", dur: 6200, selector: '[data-demo="main"]',
+    text: "This is the methodology: a Map (CLAUDE.md) routes the agent, Rooms load per stage of work, Skills load per task. The folder behaves like a deep specialist — that's the engine under everything you've seen.",
+    action: (d) => d({ type: "view", view: "brain" }) },
+
   { chapter: "You own it", title: "It's all just files you own.", dur: 6000, selector: '[data-demo="panel"]',
-    text: "Every card is a markdown file. The board IS the folder — nothing is trapped inside an app.",
-    action: (d) => { d({ type: "select", id: "t-101" }); d({ type: "fileMode", on: true }); } },
+    text: "Back to a task: every card is a markdown file. The board IS the folder — nothing is trapped inside an app.",
+    action: (d) => { d({ type: "view", view: "board" }); d({ type: "space", slug: "northwind" }); d({ type: "select", id: "t-101" }); d({ type: "fileMode", on: true }); } },
   { chapter: "Who sees what", title: "Different people, different views.", dur: 6200, selector: '[data-demo="role"]',
-    text: "Executive sees everything; a client sees only their own requests. Real, enforced access. Now — the fully autonomous way.",
+    text: "Executive sees everything; a member sees client spaces; a client sees only their own requests. Real, enforced access — every account scoped server-side.",
     action: (d) => { d({ type: "fileMode", on: false }); d({ type: "select", id: undefined }); d({ type: "role", role: "exec" }); } },
+
+  // ── what's in the full system (explained, not shown) ──
+  { chapter: "In the full system", title: "Logins, and many businesses — separated.", dur: 6600, selector: '[data-demo="locked"]',
+    text: "Every client and teammate logs in (that's how messaging works), and you can run multiple businesses from one account — each its own clients, team, and billing, fully separated. Nothing ever mixes.",
+    action: (d) => { d({ type: "view", view: "board" }); d({ type: "select", id: undefined }); } },
+  { chapter: "In the full system", title: "Calendar → billing, costs, decisions, admin.", dur: 6800, selector: '[data-demo="locked"]',
+    text: "A calendar where scheduled time drives billing and the admin's cost view; a costs board; a decision log the AI reads as context; org & access admin. We kept this demo deliberately specific and didn't go overboard — tap any 🔒 item to read exactly what each is and how it works.",
+    action: (d) => d({ type: "view", view: "board" }) },
 ];
 
 const TERM: { t: string; k: string }[] = [

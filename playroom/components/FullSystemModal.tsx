@@ -4,7 +4,7 @@ import { useStore } from "@/lib/store";
 const FEATURES: Record<string, { title: string; body: string; backend: string }> = {
   login: {
     title: "Login & accounts",
-    body: "Real accounts: every operator and every client gets their own login. A client signs in and sees only their workspace; an operator sees the client spaces; an executive sees everything — exactly the tiers you tried in “View as.” The demo skips login so you can explore freely.",
+    body: "Every operator and every client has their own login — that's exactly what makes the messaging multiplayer (teammates can DM and chat in real time). A client signs in and sees only their workspace; an operator sees the client spaces; an executive sees everything — the tiers you tried in “View as.” The demo just drops you straight in so you can explore without signing up.",
     backend: "Supabase Auth (email + magic link). What each person can see is enforced server-side by ~29 row-level-security policies — the access isn't a UI trick, it's at the database.",
   },
   businesses: {
