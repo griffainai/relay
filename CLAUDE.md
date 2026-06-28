@@ -19,6 +19,7 @@ You never load everything. You load the map, walk to the room the work is in, an
 
 | When you are… | Read | Then |
 |---|---|---|
+| New here / want the whole loop | `reference/operating-procedure.md` | The end-to-end procedure on one page |
 | Starting a session | `identity.md` → `rules.md` → `studio/STATE.md` | Know who you are + the state of the board |
 | Picking up a new request | `rooms/intake/CONTEXT.md` | Restate it + sort into a lane |
 | Sorting a request | `reference/lane-protocol.md` | Assign 🟢/🔴/🟡 with a one-line reason |

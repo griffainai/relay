@@ -1,10 +1,10 @@
 # STATE — Northwind
-_Owner: @alex · Updated 2026-06-23_
+_Owner: @alex · Retainer · Updated 2026-06-24_
 
 ## Priority order
 1. `req-016` — pricing page live (**escalated — needs @alex**)
-2. `req-015` — team photo swap (**on hold — waiting on Dana**)
 
-## Cleared today
+## Cleared (recent)
+- `req-015` — team photo swap (asset arrived 06-24 → cleared) ✓
 - `req-014` — hero headline rewrite ✓
 - `req-013` — footer year → 2026 ✓

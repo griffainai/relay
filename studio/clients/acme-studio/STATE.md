@@ -1,8 +1,9 @@
 # STATE — Acme Studio
-_Owner: @sam · Updated 2026-06-23_
+_Owner: @sam · Project · Updated 2026-06-24_
 
 ## Priority order
-1. `req-032` — testimonial block (queued, in playbook)
+- Nothing open. Project requests cleared.
 
-## Cleared today
+## Cleared (recent)
+- `req-032` — homepage testimonial block (approved quotes only) ✓
 - `req-031` — Services meta description ✓
