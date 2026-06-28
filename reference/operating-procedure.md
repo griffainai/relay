@@ -30,7 +30,7 @@ request in
 4. **Only if the task needs it:** the matching **skill** (`skills/<name>/SKILL.md`). Never load a skill you don't need.
 
 ## 3a. CLEAR — do it
-- Map the request type → its skill via `playbook.md` (COPY-001→copy-edit, CONTENT-001→content-update, PAGE-001→page-change, SEO-001→seo-meta, FIX-001→inline, DIGEST-001→status-digest).
+- Map the request type → its skill via `playbook.md` (COPY-001→copy-edit, CONTENT-001→content-update, PAGE-001→page-change, SEO-001→seo-meta, DIGEST-001→status-digest). FIX-001 needs no skill — just make the correction in a deliverable and note the before/after.
 - Load `rooms/delivery/CONTEXT.md` + the client `CONTEXT.md`. Do the work as a **deliverable file** — never live, always reversible, original preserved.
 - Write the 3-line completion note (what · where · the safety line). (pattern: complete-and-note)
 
