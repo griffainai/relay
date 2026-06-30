@@ -22,6 +22,10 @@ export const BETA = {
   ],
 };
 
+// Illustrative founding members for on-site social proof (seeded, like the reviews
+// wall). Real signups append locally; the actual list lives in your form dashboard.
+export const FOUNDERS = ["Marcus", "Priya", "Devon", "Sara", "Theo"];
+
 // "The structure is free. The substance is the folder you build."
 export const CRAFT = {
   eyebrow: "The part that's actually on you",
