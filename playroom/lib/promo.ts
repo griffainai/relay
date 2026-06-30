@@ -1,7 +1,7 @@
 // The thesis + the community CTA. One place to edit the copy and the link.
 export const SCHOOL = {
-  name: "Jake's Skool community",          // TODO(owner): confirm the exact community name
-  url: "https://www.skool.com/",           // TODO(owner): paste the real invite/community link
+  name: "Cliefnotes",
+  url: "https://www.skool.com/cliefnotes",
   course: "Interpretable Context Methodology",
 };
 

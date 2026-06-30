@@ -135,6 +135,8 @@ Relay isn't a SaaS you log into — it's *your folder + this app*. The demo is t
 ## The methodology — ICM
 Relay is built on **Interpretable Context Methodology**: a folder structure where a `CLAUDE.md` map routes to context "rooms" and reusable "skills," so a plain folder behaves like a deep, auditable specialist. The methodology is shared openly — take the pattern.
 
+Learn to build folders like this — the craft is ICM, taught in the **[Cliefnotes community](https://www.skool.com/cliefnotes)**.
+
 ## License
 **Split:**
 - **The methodology** (this ICM folder) is **open** — take the pattern, build your own studio on it.
